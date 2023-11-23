@@ -13,6 +13,15 @@
       <p v-if="weatherData.current.condition.text">
         Condição: {{ weatherData.current.condition.text }}
       </p>
+      <p v-if="weatherData.current.wind_kph">
+        Velocidade do Vento: {{ weatherData.current.wind_kph }} km/h
+      </p>
+      <p v-if="weatherData.current.wind_dir">
+        Direção do Vento: {{ translateWindDirection(weatherData.current.wind_dir) }}
+      </p>
+      <p v-if="weatherData.current.air_quality">
+        Qualidade do Ar: {{ translateAirQuality(weatherData.current.air_quality['us-epa-index']) }}
+      </p>
     </section>
 
     <button @click="getCurrentLocation" :disabled="loading">Atualizar Localização</button>
@@ -22,22 +31,31 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 
-interface WeatherData {
-  location: {
-    name: string
-    region: string
-    country: string
+interface Location {
+  name: string
+  region: string
+  country: string
+}
+
+interface CurrentWeather {
+  temp_c: number
+  condition: {
+    text: string
   }
-  current: {
-    temp_c: number
-    condition: {
-      text: string
-    }
+  wind_kph: number
+  wind_dir: string
+  air_quality: {
+    'us-epa-index': number
   }
 }
 
+interface WeatherData {
+  location: Location
+  current: CurrentWeather
+}
+
 const apiKey = '687b52386fd944d696a195406232311'
-const apiUrl = 'https://api.weatherapi.com/v1/current.json'
+const forecastApiUrl = 'https://api.weatherapi.com/v1/forecast.json'
 const weatherData = ref<WeatherData>({
   location: {
     name: '',
@@ -48,6 +66,11 @@ const weatherData = ref<WeatherData>({
     temp_c: 0,
     condition: {
       text: ''
+    },
+    wind_kph: 0,
+    wind_dir: '',
+    air_quality: {
+      'us-epa-index': 0
     }
   }
 })
@@ -78,25 +101,79 @@ const getCurrentLocation = () => {
       console.error('Geolocalização não suportada no seu navegador.')
       loading.value = false
     }
-  }, 1000) // Atraso de 1 segundo
+  }, 1000)
 }
 
 const fetchWeatherData = async (latitude: number, longitude: number) => {
   try {
-    const response = await fetch(`${apiUrl}?key=${apiKey}&q=${latitude},${longitude}&lang=pt`)
+    const response = await fetch(
+      `${forecastApiUrl}?key=${apiKey}&q=${latitude},${longitude}&lang=pt&days=1&aqi=yes`
+    )
     const data = await response.json()
     console.log('Dados do clima recebidos com sucesso:', data)
-    weatherData.value = data
+    weatherData.value = {
+      location: {
+        name: data.location.name,
+        region: data.location.region,
+        country: data.location.country
+      },
+      current: {
+        temp_c: data.current.temp_c,
+        condition: {
+          text: data.current.condition.text
+        },
+        wind_kph: data.current.wind_kph,
+        wind_dir: data.current.wind_dir,
+        air_quality: {
+          'us-epa-index': data.current.air_quality['us-epa-index']
+        }
+      }
+    }
   } catch (error: any) {
     console.error('Erro ao obter dados do clima:', error.message)
   } finally {
     loading.value = false
   }
 }
+
+const translateWindDirection = (windDirection: string) => {
+  const directionMap: Record<string, string> = {
+    N: 'Norte',
+    NNE: 'Nor-Nordeste',
+    NE: 'Nordeste',
+    ENE: 'Leste-Nordeste',
+    E: 'Leste',
+    ESE: 'Leste-Sudeste',
+    SE: 'Sudeste',
+    SSE: 'Sul-Sudeste',
+    S: 'Sul',
+    SSW: 'Sul-Sudoeste',
+    SW: 'Sudoeste',
+    WSW: 'Oeste-Sudoeste',
+    W: 'Oeste',
+    WNW: 'Oeste-Noroeste',
+    NW: 'Noroeste',
+    NNW: 'Nor-Noroeste'
+  }
+
+  return directionMap[windDirection] || windDirection
+}
+
+const translateAirQuality = (airQuality: number) => {
+  const qualityMap: Record<number, string> = {
+    1: 'Boa',
+    2: 'Moderada',
+    3: 'Insalubre para grupos sensíveis',
+    4: 'Insalubre',
+    5: 'Muito insalubre',
+    6: 'Perigosa'
+  }
+
+  return qualityMap[airQuality] || 'Desconhecida'
+}
 </script>
 
 <style scoped>
-/* Estilos conforme necessário */
 body {
   font-family: 'Roboto', sans-serif;
   margin: 0;
