@@ -2,6 +2,18 @@
   <div>
     <h1>Previsão do Tempo</h1>
 
+    <div>
+      <label for="cityInput">Digite o nome da cidade:</label>
+      <input v-model="selectedCity" id="cityInput" type="text" @input="searchCities" />
+      <button @click="getWeatherByCity">Verificar Tempo</button>
+
+      <ul v-if="suggestedCities.length" style="width: auto">
+        <li v-for="city in suggestedCities" :key="city.name">
+          <a @click="selectCity(city)">{{ city.name }}, {{ city.region }}, {{ city.country }}</a>
+        </li>
+      </ul>
+    </div>
+
     <p v-if="loading">Carregando...</p>
 
     <section v-else>
@@ -60,6 +72,12 @@ interface WeatherData {
   current: CurrentWeather
 }
 
+interface SuggestedCity {
+  name: string
+  region: string
+  country: string
+}
+
 const apiKey = '687b52386fd944d696a195406232311'
 const forecastApiUrl = 'https://api.weatherapi.com/v1/forecast.json'
 const weatherData = ref<WeatherData>({
@@ -81,8 +99,10 @@ const weatherData = ref<WeatherData>({
     }
   }
 })
-
+const selectedCity = ref('')
 const loading = ref(false)
+const suggestedCities = ref<SuggestedCity[]>([])
+const error = ref<string | null>(null)
 
 onMounted(() => {
   getCurrentLocation()
@@ -99,8 +119,8 @@ const getCurrentLocation = () => {
           console.log('Localização obtida com sucesso:', latitude, longitude)
           await fetchWeatherData(latitude, longitude)
         },
-        (error: GeolocationPositionError) => {
-          console.error('Erro ao obter localização:', error.message)
+        (err: GeolocationPositionError) => {
+          console.error('Erro ao obter localização:', err.message)
           loading.value = false
         }
       )
@@ -109,6 +129,45 @@ const getCurrentLocation = () => {
       loading.value = false
     }
   }, 1000)
+}
+
+const getWeatherByCity = async () => {
+  if (selectedCity.value) {
+    loading.value = true
+    try {
+      const response = await fetch(
+        `${forecastApiUrl}?key=${apiKey}&q=${selectedCity.value}&lang=pt&days=1&aqi=yes`
+      )
+      const data = await response.json()
+      console.log('Dados do clima recebidos com sucesso:', data)
+      weatherData.value = {
+        location: {
+          name: data.location.name,
+          region: data.location.region,
+          country: data.location.country
+        },
+        current: {
+          temp_c: data.current.temp_c,
+          condition: {
+            text: data.current.condition.text,
+            icon: data.current.condition.icon
+          },
+          wind_kph: data.current.wind_kph,
+          wind_dir: data.current.wind_dir,
+          air_quality: {
+            'us-epa-index': data.current.air_quality['us-epa-index']
+          }
+        }
+      }
+    } catch (err: any) {
+      console.error('Erro ao obter dados do clima:', err.message)
+      error.value = err.message
+    } finally {
+      loading.value = false
+    }
+  } else {
+    console.error('Digite o nome da cidade antes de verificar o tempo.')
+  }
 }
 
 const fetchWeatherData = async (latitude: number, longitude: number) => {
@@ -137,8 +196,9 @@ const fetchWeatherData = async (latitude: number, longitude: number) => {
         }
       }
     }
-  } catch (error: any) {
-    console.error('Erro ao obter dados do clima:', error.message)
+  } catch (err: any) {
+    console.error('Erro ao obter dados do clima:', err.message)
+    error.value = err.message
   } finally {
     loading.value = false
   }
@@ -179,6 +239,33 @@ const translateAirQuality = (airQuality: number) => {
 
   return qualityMap[airQuality] || 'Desconhecida'
 }
+
+const searchCities = async () => {
+  if (selectedCity.value.length >= 3) {
+    try {
+      const response = await fetch(
+        `https://api.weatherapi.com/v1/search.json?key=${apiKey}&q=${selectedCity.value}`
+      )
+      const data = await response.json()
+      suggestedCities.value = data.map((city: SuggestedCity) => ({
+        name: city.name,
+        region: city.region,
+        country: city.country
+      }))
+    } catch (err: any) {
+      console.error('Erro ao buscar cidades:', err.message)
+      error.value = err.message
+    }
+  } else {
+    suggestedCities.value = []
+  }
+}
+
+const selectCity = (city: SuggestedCity) => {
+  selectedCity.value = `${city.name}, ${city.region}, ${city.country}`
+  suggestedCities.value = []
+  error.value = null
+}
 </script>
 
 <style scoped>
@@ -211,5 +298,30 @@ button:hover {
 img {
   width: 64px;
   height: 64px;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  position: absolute;
+  background-color: #f1f1f1;
+  width: 100%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+li {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+li a {
+  text-decoration: none;
+  color: #333;
+  display: block;
+}
+
+li:hover {
+  background-color: #ddd;
 }
 </style>
