@@ -9,7 +9,12 @@
         {{ weatherData.location.name }}, {{ weatherData.location.region }},
         {{ weatherData.location.country }}
       </p>
-      <p v-if="weatherData.current.temp_c">Temperatura: {{ weatherData.current.temp_c }}°C</p>
+
+      <div v-if="weatherData.current.temp_c">
+        <img :src="weatherData.current.condition.icon" alt="Weather Icon" />
+        <p>Temperatura: {{ weatherData.current.temp_c }}°C</p>
+      </div>
+
       <p v-if="weatherData.current.condition.text">
         Condição: {{ weatherData.current.condition.text }}
       </p>
@@ -41,6 +46,7 @@ interface CurrentWeather {
   temp_c: number
   condition: {
     text: string
+    icon: string
   }
   wind_kph: number
   wind_dir: string
@@ -65,7 +71,8 @@ const weatherData = ref<WeatherData>({
   current: {
     temp_c: 0,
     condition: {
-      text: ''
+      text: '',
+      icon: ''
     },
     wind_kph: 0,
     wind_dir: '',
@@ -120,7 +127,8 @@ const fetchWeatherData = async (latitude: number, longitude: number) => {
       current: {
         temp_c: data.current.temp_c,
         condition: {
-          text: data.current.condition.text
+          text: data.current.condition.text,
+          icon: data.current.condition.icon
         },
         wind_kph: data.current.wind_kph,
         wind_dir: data.current.wind_dir,
@@ -198,5 +206,10 @@ button {
 
 button:hover {
   background-color: #45a049;
+}
+
+img {
+  width: 64px;
+  height: 64px;
 }
 </style>
