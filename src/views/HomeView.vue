@@ -60,6 +60,8 @@
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
+import { translateAirQuality } from '../helpers/translateAirQuality'
+import { translateWindDirection } from '../helpers/translateWindDirection'
 
 interface Location {
   name: string
@@ -258,42 +260,6 @@ const fetchWeatherData = async (latitude: number, longitude: number) => {
   } finally {
     loading.value = false
   }
-}
-
-const translateWindDirection = (windDirection: string) => {
-  const directionMap: Record<string, string> = {
-    N: 'Norte',
-    NNE: 'Nor-Nordeste',
-    NE: 'Nordeste',
-    ENE: 'Leste-Nordeste',
-    E: 'Leste',
-    ESE: 'Leste-Sudeste',
-    SE: 'Sudeste',
-    SSE: 'Sul-Sudeste',
-    S: 'Sul',
-    SSW: 'Sul-Sudoeste',
-    SW: 'Sudoeste',
-    WSW: 'Oeste-Sudoeste',
-    W: 'Oeste',
-    WNW: 'Oeste-Noroeste',
-    NW: 'Noroeste',
-    NNW: 'Nor-Noroeste'
-  }
-
-  return directionMap[windDirection] || windDirection
-}
-
-const translateAirQuality = (airQuality: number) => {
-  const qualityMap: Record<number, string> = {
-    1: 'Boa',
-    2: 'Moderada',
-    3: 'Insalubre para grupos sensíveis',
-    4: 'Insalubre',
-    5: 'Muito insalubre',
-    6: 'Perigosa'
-  }
-
-  return qualityMap[airQuality] || 'Desconhecida'
 }
 
 const searchCities = async () => {
