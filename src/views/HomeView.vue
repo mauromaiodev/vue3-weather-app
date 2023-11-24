@@ -50,7 +50,7 @@
           :key="forecastDay.date"
           class="forecast-item"
         >
-          <p>Data: {{ forecastDay.date }}</p>
+          <p>Data: {{ formatDate(forecastDay.date) }}</p>
           <p>Temp. Média: {{ forecastDay.day.avgtemp_c }}°C</p>
           <p>Condição: {{ forecastDay.day.condition.text }}</p>
           {{ console.log('Forecast Data:', forecastDay) }}
@@ -64,6 +64,7 @@
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
+import { formatDate } from '../helpers/formatDate'
 import { translateAirQuality } from '../helpers/translateAirQuality'
 import { translateWindDirection } from '../helpers/translateWindDirection'
 
