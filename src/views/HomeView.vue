@@ -107,7 +107,7 @@ interface SuggestedCity {
   country: string
 }
 
-const apiKey = '687b52386fd944d696a195406232311'
+const apiKey = import.meta.env.VITE_API_KEY
 const currentWeatherApiUrl = 'https://api.weatherapi.com/v1/current.json'
 const forecastApiUrl = 'https://api.weatherapi.com/v1/forecast.json'
 
