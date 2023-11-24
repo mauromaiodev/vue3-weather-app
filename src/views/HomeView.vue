@@ -1,6 +1,23 @@
 <template>
-  <div>
-    <h1>Previsão do Tempo</h1>
+  <div class="container">
+    <section>
+      <h2 v-if="weatherData.location.name">
+        {{ weatherData.location.name }}, {{ weatherData.location.region }}
+      </h2>
+    </section>
+
+    <section class="current-weather-container">
+      <div v-if="weatherData.current.temp_c">
+        <div class="current-temp">{{ weatherData.current.temp_c }}°C</div>
+        <div>
+          <img
+            class="current-weather-icon"
+            :src="weatherData.current.condition.icon"
+            alt="Weather Icon"
+          />
+        </div>
+      </div>
+    </section>
 
     <section class="search-container">
       <label for="cityInput">Digite o nome da cidade:</label>
@@ -18,16 +35,6 @@
 
     <section class="data-container" v-else>
       <h3 class="data-container-title">Hoje</h3>
-
-      <p v-if="weatherData.location.name">
-        {{ weatherData.location.name }}, {{ weatherData.location.region }},
-        {{ weatherData.location.country }}
-      </p>
-
-      <div v-if="weatherData.current.temp_c">
-        <img :src="weatherData.current.condition.icon" alt="Weather Icon" />
-        <p>Temperatura: {{ weatherData.current.temp_c }}°C</p>
-      </div>
 
       <p v-if="weatherData.current.condition.text">
         Condição: {{ weatherData.current.condition.text }}
@@ -300,11 +307,6 @@ const selectCity = (city: SuggestedCity) => {
 </script>
 
 <style scoped>
-div {
-  text-align: center;
-  padding: 20px;
-}
-
 button {
   background-color: #4caf50;
   color: white;
@@ -318,11 +320,6 @@ button {
 
 button:hover {
   background-color: #45a049;
-}
-
-img {
-  width: 64px;
-  height: 64px;
 }
 
 ul {
@@ -348,6 +345,26 @@ li a {
 
 li:hover {
   background-color: #ddd;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  text-align: center;
+}
+
+.current-temp {
+  font-size: 40px;
+}
+.current-weather-container {
+  display: flex;
+  justify-content: center;
+}
+
+.current-weather-icon {
+  width: 64px;
+  height: 64px;
 }
 
 .data-container-title {
