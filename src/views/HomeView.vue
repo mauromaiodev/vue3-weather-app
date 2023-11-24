@@ -17,6 +17,8 @@
     <p v-if="loading">Carregando...</p>
 
     <section class="data-container" v-else>
+      <h3 class="data-container-title">Hoje</h3>
+
       <p v-if="weatherData.location.name">
         {{ weatherData.location.name }}, {{ weatherData.location.region }},
         {{ weatherData.location.country }}
@@ -39,7 +41,9 @@
       <p v-if="weatherData.current.air_quality">
         Qualidade do Ar: {{ translateAirQuality(weatherData.current.air_quality['us-epa-index']) }}
       </p>
+    </section>
 
+    <section>
       <div class="forecast-container">
         <div
           v-for="forecastDay in weatherData.forecast.forecastday"
@@ -345,6 +349,11 @@ li:hover {
   background-color: #ddd;
 }
 
+.data-container-title {
+  display: flex;
+  margin-bottom: 10px;
+}
+
 .search-container {
   display: flex;
   flex-direction: column;
@@ -354,7 +363,11 @@ li:hover {
 .data-container {
   display: flex;
   flex-direction: column;
+  padding: 10px;
   margin-top: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .forecast-container {
