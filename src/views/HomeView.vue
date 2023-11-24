@@ -295,12 +295,6 @@ const selectCity = (city: SuggestedCity) => {
 </script>
 
 <style scoped>
-body {
-  font-family: 'Roboto', sans-serif;
-  margin: 0;
-  padding: 0;
-}
-
 div {
   text-align: center;
   padding: 20px;
