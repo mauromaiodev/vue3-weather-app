@@ -39,6 +39,19 @@
       <p v-if="weatherData.current.air_quality">
         Qualidade do Ar: {{ translateAirQuality(weatherData.current.air_quality['us-epa-index']) }}
       </p>
+
+      <div class="forecast-container">
+        <div
+          v-for="forecastDay in weatherData.forecast.forecastday"
+          :key="forecastDay.date"
+          class="forecast-item"
+        >
+          <p>Data: {{ forecastDay.date }}</p>
+          <p>Temp. Média: {{ forecastDay.day.avgtemp_c }}°C</p>
+          <p>Condição: {{ forecastDay.day.condition.text }}</p>
+          {{ console.log('Forecast Data:', forecastDay) }}
+        </div>
+      </div>
     </section>
 
     <button @click="getCurrentLocation" :disabled="loading">Atualizar Localização</button>
@@ -67,9 +80,23 @@ interface CurrentWeather {
   }
 }
 
+interface Forecast {
+  forecastday: {
+    date: string
+    day: {
+      avgtemp_c: number
+      condition: {
+        text: string
+        icon: string
+      }
+    }
+  }[]
+}
+
 interface WeatherData {
   location: Location
   current: CurrentWeather
+  forecast: Forecast
 }
 
 interface SuggestedCity {
@@ -97,8 +124,12 @@ const weatherData = ref<WeatherData>({
     air_quality: {
       'us-epa-index': 0
     }
+  },
+  forecast: {
+    forecastday: []
   }
 })
+
 const selectedCity = ref('')
 const loading = ref(false)
 const suggestedCities = ref<SuggestedCity[]>([])
@@ -135,28 +166,40 @@ const getWeatherByCity = async () => {
   if (selectedCity.value) {
     loading.value = true
     try {
-      const response = await fetch(
-        `${currentWeatherApiUrl}?key=${apiKey}&q=${selectedCity.value}&lang=pt&aqi=yes`
-      )
-      const data = await response.json()
-      console.log('Dados do clima recebidos com sucesso:', data)
+      const [currentResponse, forecastResponse] = await Promise.all([
+        fetch(`${currentWeatherApiUrl}?key=${apiKey}&q=${selectedCity.value}&lang=pt&aqi=yes`),
+        fetch(
+          `${currentWeatherApiUrl.replace('current.json', 'forecast.json')}?key=${apiKey}&q=${
+            selectedCity.value
+          }&lang=pt&aqi=yes&days=1`
+        )
+      ])
+
+      const currentData = await currentResponse.json()
+      const forecastData = await forecastResponse.json()
+
+      console.log('Dados do clima recebidos com sucesso:', currentData, forecastData)
+
       weatherData.value = {
         location: {
-          name: data.location.name,
-          region: data.location.region,
-          country: data.location.country
+          name: currentData.location.name,
+          region: currentData.location.region,
+          country: currentData.location.country
         },
         current: {
-          temp_c: data.current.temp_c,
+          temp_c: currentData.current.temp_c,
           condition: {
-            text: data.current.condition.text,
-            icon: data.current.condition.icon
+            text: currentData.current.condition.text,
+            icon: currentData.current.condition.icon
           },
-          wind_kph: data.current.wind_kph,
-          wind_dir: data.current.wind_dir,
+          wind_kph: currentData.current.wind_kph,
+          wind_dir: currentData.current.wind_dir,
           air_quality: {
-            'us-epa-index': data.current.air_quality['us-epa-index']
+            'us-epa-index': currentData.current.air_quality['us-epa-index']
           }
+        },
+        forecast: {
+          forecastday: forecastData.forecast.forecastday
         }
       }
     } catch (err: any) {
@@ -172,28 +215,41 @@ const getWeatherByCity = async () => {
 
 const fetchWeatherData = async (latitude: number, longitude: number) => {
   try {
-    const response = await fetch(
-      `${currentWeatherApiUrl}?key=${apiKey}&q=${latitude},${longitude}&lang=pt&aqi=yes`
-    )
-    const data = await response.json()
-    console.log('Dados do clima recebidos com sucesso:', data)
+    const [currentResponse, forecastResponse] = await Promise.all([
+      fetch(`${currentWeatherApiUrl}?key=${apiKey}&q=${latitude},${longitude}&lang=pt&aqi=yes`),
+      fetch(
+        `${currentWeatherApiUrl.replace(
+          'current.json',
+          'forecast.json'
+        )}?key=${apiKey}&q=${latitude},${longitude}&lang=pt&aqi=yes&days=1`
+      )
+    ])
+
+    const currentData = await currentResponse.json()
+    const forecastData = await forecastResponse.json()
+
+    console.log('Dados do clima recebidos com sucesso:', currentData, forecastData)
+
     weatherData.value = {
       location: {
-        name: data.location.name,
-        region: data.location.region,
-        country: data.location.country
+        name: currentData.location.name,
+        region: currentData.location.region,
+        country: currentData.location.country
       },
       current: {
-        temp_c: data.current.temp_c,
+        temp_c: currentData.current.temp_c,
         condition: {
-          text: data.current.condition.text,
-          icon: data.current.condition.icon
+          text: currentData.current.condition.text,
+          icon: currentData.current.condition.icon
         },
-        wind_kph: data.current.wind_kph,
-        wind_dir: data.current.wind_dir,
+        wind_kph: currentData.current.wind_kph,
+        wind_dir: currentData.current.wind_dir,
         air_quality: {
-          'us-epa-index': data.current.air_quality['us-epa-index']
+          'us-epa-index': currentData.current.air_quality['us-epa-index']
         }
+      },
+      forecast: {
+        forecastday: forecastData.forecast.forecastday
       }
     }
   } catch (err: any) {
@@ -323,5 +379,20 @@ li a {
 
 li:hover {
   background-color: #ddd;
+}
+
+.forecast-container {
+  display: flex;
+  overflow-x: auto;
+}
+
+.forecast-item {
+  flex: 0 0 auto;
+  width: 200px;
+  padding: 10px;
+  margin-right: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 </style>
