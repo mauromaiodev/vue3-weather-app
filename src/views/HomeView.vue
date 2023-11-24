@@ -4,7 +4,7 @@
 
     <section class="search-container">
       <label for="cityInput">Digite o nome da cidade:</label>
-      <input v-model="selectedCity" id="cityInput" type="text" @input="searchCities" />
+      <input v-model="selectedCity" id="cityInput" type="text" @input="handleInput" />
       <button @click="getWeatherByCity">Verificar Tempo</button>
 
       <ul v-if="suggestedCities.length">
@@ -262,6 +262,16 @@ const fetchWeatherData = async (latitude: number, longitude: number) => {
   }
 }
 
+const inputDelay = 500
+let inputTimer: ReturnType<typeof setTimeout> | null = null
+
+const handleInput = () => {
+  if (inputTimer) {
+    clearTimeout(inputTimer)
+  }
+
+  inputTimer = setTimeout(searchCities, inputDelay) as number
+}
 const searchCities = async () => {
   if (selectedCity.value.length >= 3) {
     try {
