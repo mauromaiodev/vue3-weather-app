@@ -2,21 +2,21 @@
   <div>
     <h1>Previsão do Tempo</h1>
 
-    <div>
+    <section class="search-container">
       <label for="cityInput">Digite o nome da cidade:</label>
       <input v-model="selectedCity" id="cityInput" type="text" @input="searchCities" />
       <button @click="getWeatherByCity">Verificar Tempo</button>
 
-      <ul v-if="suggestedCities.length" style="width: auto">
+      <ul v-if="suggestedCities.length">
         <li v-for="city in suggestedCities" :key="city.name">
           <a @click="selectCity(city)">{{ city.name }}, {{ city.region }}, {{ city.country }}</a>
         </li>
       </ul>
-    </div>
+    </section>
 
     <p v-if="loading">Carregando...</p>
 
-    <section v-else>
+    <section class="data-container" v-else>
       <p v-if="weatherData.location.name">
         {{ weatherData.location.name }}, {{ weatherData.location.region }},
         {{ weatherData.location.country }}
@@ -345,6 +345,18 @@ li a {
 
 li:hover {
   background-color: #ddd;
+}
+
+.search-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.data-container {
+  display: flex;
+  flex-direction: column;
+  margin-top: 10px;
 }
 
 .forecast-container {
