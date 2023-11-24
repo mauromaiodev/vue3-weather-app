@@ -109,6 +109,8 @@ interface SuggestedCity {
 
 const apiKey = '687b52386fd944d696a195406232311'
 const currentWeatherApiUrl = 'https://api.weatherapi.com/v1/current.json'
+const forecastApiUrl = 'https://api.weatherapi.com/v1/forecast.json'
+
 const weatherData = ref<WeatherData>({
   location: {
     name: '',
@@ -170,11 +172,7 @@ const getWeatherByCity = async () => {
     try {
       const [currentResponse, forecastResponse] = await Promise.all([
         fetch(`${currentWeatherApiUrl}?key=${apiKey}&q=${selectedCity.value}&lang=pt&aqi=yes`),
-        fetch(
-          `${currentWeatherApiUrl.replace('current.json', 'forecast.json')}?key=${apiKey}&q=${
-            selectedCity.value
-          }&lang=pt&aqi=yes&days=1`
-        )
+        fetch(`${forecastApiUrl}?key=${apiKey}&q=${selectedCity.value}&lang=pt&aqi=yes&days=1`)
       ])
 
       const currentData = await currentResponse.json()
@@ -219,12 +217,7 @@ const fetchWeatherData = async (latitude: number, longitude: number) => {
   try {
     const [currentResponse, forecastResponse] = await Promise.all([
       fetch(`${currentWeatherApiUrl}?key=${apiKey}&q=${latitude},${longitude}&lang=pt&aqi=yes`),
-      fetch(
-        `${currentWeatherApiUrl.replace(
-          'current.json',
-          'forecast.json'
-        )}?key=${apiKey}&q=${latitude},${longitude}&lang=pt&aqi=yes&days=1`
-      )
+      fetch(`${forecastApiUrl}?key=${apiKey}&q=${latitude},${longitude}&lang=pt&aqi=yes&days=1`)
     ])
 
     const currentData = await currentResponse.json()
@@ -262,7 +255,7 @@ const fetchWeatherData = async (latitude: number, longitude: number) => {
   }
 }
 
-const inputDelay = 500
+const inputDelay = 1000
 let inputTimer: ReturnType<typeof setTimeout> | null = null
 
 const handleInput = () => {
@@ -270,8 +263,9 @@ const handleInput = () => {
     clearTimeout(inputTimer)
   }
 
-  inputTimer = setTimeout(searchCities, inputDelay) as number
+  inputTimer = setTimeout(searchCities, inputDelay) as any
 }
+
 const searchCities = async () => {
   if (selectedCity.value.length >= 3) {
     try {
