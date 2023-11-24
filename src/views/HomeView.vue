@@ -5,13 +5,13 @@
     <section class="search-container">
       <label for="cityInput">Digite o nome da cidade:</label>
       <input v-model="selectedCity" id="cityInput" type="text" @input="handleInput" />
-      <button @click="getWeatherByCity">Verificar Tempo</button>
-
-      <ul v-if="suggestedCities.length">
+      <ul v-if="suggestedCities.length" style="position: relative">
         <li v-for="city in suggestedCities" :key="city.name">
           <a @click="selectCity(city)">{{ city.name }}, {{ city.region }}, {{ city.country }}</a>
         </li>
       </ul>
+
+      <button @click="getWeatherByCity">Verificar Tempo</button>
     </section>
 
     <p v-if="loading">Carregando...</p>
@@ -348,7 +348,7 @@ li:hover {
 .search-container {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 5px;
 }
 
 .data-container {
