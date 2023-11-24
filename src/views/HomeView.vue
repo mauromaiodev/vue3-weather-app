@@ -79,7 +79,7 @@ interface SuggestedCity {
 }
 
 const apiKey = '687b52386fd944d696a195406232311'
-const forecastApiUrl = 'https://api.weatherapi.com/v1/forecast.json'
+const currentWeatherApiUrl = 'https://api.weatherapi.com/v1/current.json'
 const weatherData = ref<WeatherData>({
   location: {
     name: '',
@@ -136,7 +136,7 @@ const getWeatherByCity = async () => {
     loading.value = true
     try {
       const response = await fetch(
-        `${forecastApiUrl}?key=${apiKey}&q=${selectedCity.value}&lang=pt&days=1&aqi=yes`
+        `${currentWeatherApiUrl}?key=${apiKey}&q=${selectedCity.value}&lang=pt&aqi=yes`
       )
       const data = await response.json()
       console.log('Dados do clima recebidos com sucesso:', data)
@@ -173,7 +173,7 @@ const getWeatherByCity = async () => {
 const fetchWeatherData = async (latitude: number, longitude: number) => {
   try {
     const response = await fetch(
-      `${forecastApiUrl}?key=${apiKey}&q=${latitude},${longitude}&lang=pt&days=1&aqi=yes`
+      `${currentWeatherApiUrl}?key=${apiKey}&q=${latitude},${longitude}&lang=pt&aqi=yes`
     )
     const data = await response.json()
     console.log('Dados do clima recebidos com sucesso:', data)
