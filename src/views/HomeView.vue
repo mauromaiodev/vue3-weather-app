@@ -81,12 +81,19 @@
       <h2 class="data-container-title">Previsão por Hora</h2>
       <div class="forecast-hour-container">
         <div
-          v-for="forecastHour in getHourlyForecast"
+          v-for="forecastHour in filteredHourlyForecast"
           :key="forecastHour.time_epoch"
           class="forecast-hour-item"
         >
-          <p>Hora: {{ formatHour(forecastHour.time_epoch) }}</p>
-          <p>Temp: {{ forecastHour.temp_c }}°C</p>
+          <p>{{ formatHour(forecastHour.time_epoch) }}</p>
+          <p>{{ forecastHour.temp_c }}°C</p>
+          <p v-if="forecastHour.condition?.text">{{ forecastHour.condition.text }}</p>
+          <img
+            v-if="forecastHour.condition?.icon"
+            class="forecast-hour-icon"
+            :src="forecastHour.condition.icon"
+            alt="Hourly Weather Icon"
+          />
         </div>
       </div>
     </section>
@@ -137,6 +144,10 @@ interface Forecast {
     hour: {
       time_epoch: number
       temp_c: number
+      condition?: {
+        text: string
+        icon: string
+      }
     }[]
   }[]
 }
@@ -306,7 +317,24 @@ const fetchWeatherData = async (latitude: number, longitude: number) => {
         }
       },
       forecast: {
-        forecastday: forecastData.forecast.forecastday
+        forecastday: forecastData.forecast.forecastday.map((day: any) => ({
+          date: day.date,
+          day: {
+            avgtemp_c: day.day.avgtemp_c,
+            condition: {
+              text: day.day.condition.text,
+              icon: day.day.condition.icon
+            }
+          },
+          hour: day.hour.map((hour: any) => ({
+            time_epoch: hour.time_epoch,
+            temp_c: hour.temp_c,
+            condition: {
+              text: hour.condition.text,
+              icon: hour.condition.icon
+            }
+          }))
+        }))
       }
     }
   } catch (err: any) {
@@ -363,6 +391,18 @@ const formatHour = (timeEpoch: number) => {
   const date = new Date(timeEpoch * 1000)
   return `${date.getHours()}:${String(date.getMinutes()).padStart(2, '0')}`
 }
+
+const currentIndex = computed(() => {
+  const currentHour = new Date().getHours()
+  return getHourlyForecast.value.findIndex((hour) => {
+    const hourDate = new Date(hour.time_epoch * 1000)
+    return hourDate.getHours() >= currentHour
+  })
+})
+
+const filteredHourlyForecast = computed(() => {
+  return getHourlyForecast.value.slice(currentIndex.value)
+})
 </script>
 
 <style scoped>
@@ -492,11 +532,25 @@ li:hover {
 }
 
 .forecast-hour-item {
-  flex: 0 0 auto;
+  min-width: 100px;
+  flex: 1 1 auto;
   padding: 5px;
   border: 1px solid #ddd;
   border-radius: 5px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.forecast-hour-item:hover {
+  background-color: #dddddd1f;
+  transform: scale(1.05);
+  transition:
+    background-color 0.3s ease,
+    transform 0.3s ease;
+}
+
+.forecast-hour-icon {
+  width: 30px;
+  height: 30px;
 }
 
 .day-theme {
