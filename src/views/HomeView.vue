@@ -50,10 +50,10 @@
 
       <div v-if="loading">Carregando...</div>
 
-      <section class="data-container" v-else>
+      <section v-else>
         <div class="data-container-title">Hoje</div>
 
-        <div>
+        <div class="data-container">
           <div v-if="weatherData.current.wind_kph">
             Velocidade do Vento: {{ weatherData.current.wind_kph }} km/h
           </div>
@@ -535,8 +535,7 @@ li:hover {
 .forecast-hour-container {
   display: flex;
   overflow-x: auto;
-  gap: 5px;
-  padding: 8px;
+  gap: 8px;
 }
 
 .forecast-hour-item {
