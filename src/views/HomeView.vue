@@ -548,14 +548,6 @@ li:hover {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.forecast-hour-item:hover {
-  background-color: #dddddd1f;
-  transform: scale(1.05);
-  transition:
-    background-color 0.3s ease,
-    transform 0.3s ease;
-}
-
 .forecast-hour-icon {
   width: 30px;
   height: 30px;
