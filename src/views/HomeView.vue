@@ -20,7 +20,7 @@
 
       <div class="current-weather-description">
         <div v-if="weatherData.current.feelslike_c">
-          Sensação Termica: {{ weatherData.current.feelslike_c }}°C
+          Sensação Térmica: {{ weatherData.current.feelslike_c }}°C
         </div>
         <div v-if="weatherData.current.condition.text">
           {{ weatherData.current.condition.text }}
@@ -77,12 +77,26 @@
       </div>
     </section>
 
+    <section>
+      <h2 class="data-container-title">Previsão por Hora</h2>
+      <div class="forecast-hour-container">
+        <div
+          v-for="forecastHour in getHourlyForecast"
+          :key="forecastHour.time_epoch"
+          class="forecast-hour-item"
+        >
+          <p>Hora: {{ formatHour(forecastHour.time_epoch) }}</p>
+          <p>Temp: {{ forecastHour.temp_c }}°C</p>
+        </div>
+      </div>
+    </section>
+
     <button @click="getCurrentLocation" :disabled="loading">Atualizar Localização</button>
   </div>
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { formatDate } from '../helpers/formatDate'
 import { formatLastUpdated } from '../helpers/formatLastUpdated'
 import { translateAirQuality } from '../helpers/translateAirQuality'
@@ -120,6 +134,10 @@ interface Forecast {
         icon: string
       }
     }
+    hour: {
+      time_epoch: number
+      temp_c: number
+    }[]
   }[]
 }
 
@@ -336,6 +354,15 @@ const selectCity = (city: SuggestedCity) => {
   suggestedCities.value = []
   error.value = null
 }
+
+const getHourlyForecast = computed(() => {
+  return weatherData.value.forecast.forecastday[0]?.hour || []
+})
+
+const formatHour = (timeEpoch: number) => {
+  const date = new Date(timeEpoch * 1000)
+  return `${date.getHours()}:${String(date.getMinutes()).padStart(2, '0')}`
+}
 </script>
 
 <style scoped>
@@ -452,6 +479,21 @@ li:hover {
   width: 200px;
   padding: 10px;
   margin-right: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.forecast-hour-container {
+  display: flex;
+  overflow-x: auto;
+  gap: 5px;
+  padding: 8px;
+}
+
+.forecast-hour-item {
+  flex: 0 0 auto;
+  padding: 5px;
   border: 1px solid #ddd;
   border-radius: 5px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
