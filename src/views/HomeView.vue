@@ -6,7 +6,7 @@
       </h2>
 
       <div class="current-weather-container">
-        <div v-if="weatherData.current.temp_c">
+        <div v-if="weatherData.current.temp_c" class="current-weather-info">
           <div class="current-temp">{{ weatherData.current.temp_c }}°C</div>
           <div>
             <img
@@ -363,9 +363,19 @@ li:hover {
 .current-temp {
   font-size: 40px;
 }
+
+.weather-container {
+  padding: 16px 16px 0px 16px;
+}
 .current-weather-container {
   display: flex;
   justify-content: center;
+}
+
+.current-weather-info {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
 }
 
 .current-weather-icon {
