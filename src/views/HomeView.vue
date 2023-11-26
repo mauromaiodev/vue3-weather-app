@@ -1,25 +1,25 @@
 <template>
   <div class="container">
-    <section>
+    <section class="weather-container" :class="{ 'day-theme': isDay, 'night-theme': !isDay }">
       <h2 v-if="weatherData.location.name">
         {{ weatherData.location.name }}, {{ weatherData.location.region }}
       </h2>
-    </section>
 
-    <section class="current-weather-container">
-      <div v-if="weatherData.current.temp_c">
-        <div class="current-temp">{{ weatherData.current.temp_c }}°C</div>
-        <div>
-          <img
-            class="current-weather-icon"
-            :src="weatherData.current.condition.icon"
-            alt="Weather Icon"
-          />
+      <div class="current-weather-container">
+        <div v-if="weatherData.current.temp_c">
+          <div class="current-temp">{{ weatherData.current.temp_c }}°C</div>
+          <div>
+            <img
+              class="current-weather-icon"
+              :src="weatherData.current.condition.icon"
+              alt="Weather Icon"
+            />
+          </div>
         </div>
       </div>
     </section>
 
-    <section class="search-container">
+    <div class="search-container">
       <label for="cityInput">Digite o nome da cidade:</label>
       <input v-model="selectedCity" id="cityInput" type="text" @input="handleInput" />
       <ul v-if="suggestedCities.length" style="position: relative">
@@ -29,7 +29,7 @@
       </ul>
 
       <button @click="getWeatherByCity">Verificar Tempo</button>
-    </section>
+    </div>
 
     <p v-if="loading">Carregando...</p>
 
@@ -60,7 +60,6 @@
           <p>Data: {{ formatDate(forecastDay.date) }}</p>
           <p>Temp. Média: {{ forecastDay.day.avgtemp_c }}°C</p>
           <p>Condição: {{ forecastDay.day.condition.text }}</p>
-          {{ console.log('Forecast Data:', forecastDay) }}
         </div>
       </div>
     </section>
@@ -150,6 +149,7 @@ const selectedCity = ref('')
 const loading = ref(false)
 const suggestedCities = ref<SuggestedCity[]>([])
 const error = ref<string | null>(null)
+const isDay = ref(true)
 
 onMounted(() => {
   getCurrentLocation()
@@ -163,8 +163,10 @@ const getCurrentLocation = () => {
       navigator.geolocation.getCurrentPosition(
         async (position) => {
           const { latitude, longitude } = position.coords
-          console.log('Localização obtida com sucesso:', latitude, longitude)
           await fetchWeatherData(latitude, longitude)
+
+          const currentHour = new Date().getHours()
+          isDay.value = currentHour >= 6 && currentHour < 18
         },
         (err: GeolocationPositionError) => {
           console.error('Erro ao obter localização:', err.message)
@@ -214,6 +216,10 @@ const getWeatherByCity = async () => {
           forecastday: forecastData.forecast.forecastday
         }
       }
+
+      const currentHour = new Date(currentData.location.localtime).getHours()
+      console.log('🚀 ~ currentHour:', currentHour)
+      isDay.value = currentHour >= 6 && currentHour < 18
     } catch (err: any) {
       console.error('Erro ao obter dados do clima:', err.message)
       error.value = err.message
@@ -401,5 +407,19 @@ li:hover {
   border: 1px solid #ddd;
   border-radius: 5px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.day-theme {
+  background-color: #5d9be5;
+  transition:
+    background-color 0.5s ease,
+    color 0.5s ease;
+}
+
+.night-theme {
+  background-color: #44296a;
+  transition:
+    background-color 0.5s ease,
+    color 0.5s ease;
 }
 </style>
