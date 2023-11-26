@@ -1,9 +1,12 @@
 <template>
   <div class="container">
     <section class="weather-container" :class="{ 'day-theme': isDay, 'night-theme': !isDay }">
-      <h2 v-if="weatherData.location.name">
-        {{ weatherData.location.name }}, {{ weatherData.location.region }}
-      </h2>
+      <div>
+        <h2 v-if="weatherData.location.name">
+          {{ weatherData.location.name }}, {{ weatherData.location.region }}
+        </h2>
+        <button @click="getCurrentLocation" :disabled="loading">Atualizar Localização</button>
+      </div>
 
       <div class="current-weather-container">
         <div v-if="weatherData.current.temp_c" class="current-weather-info">
@@ -32,73 +35,73 @@
       </div>
     </section>
 
-    <div class="search-container">
-      <label for="cityInput">Digite o nome da cidade:</label>
-      <input v-model="selectedCity" id="cityInput" type="text" @input="handleInput" />
-      <ul v-if="suggestedCities.length" style="position: relative">
-        <li v-for="city in suggestedCities" :key="city.name">
-          <a @click="selectCity(city)">{{ city.name }}, {{ city.region }}, {{ city.country }}</a>
-        </li>
-      </ul>
+    <div class="main-info">
+      <section class="search-container">
+        <label for="cityInput">Digite o nome da cidade:</label>
+        <input v-model="selectedCity" id="cityInput" type="text" @input="handleInput" />
+        <ul v-if="suggestedCities.length" style="position: relative">
+          <li v-for="city in suggestedCities" :key="city.name">
+            <a @click="selectCity(city)">{{ city.name }}, {{ city.region }}, {{ city.country }}</a>
+          </li>
+        </ul>
 
-      <button @click="getWeatherByCity">Verificar Tempo</button>
+        <button @click="getWeatherByCity">Verificar Tempo</button>
+      </section>
+
+      <div v-if="loading">Carregando...</div>
+
+      <section class="data-container" v-else>
+        <div class="data-container-title">Hoje</div>
+
+        <div>
+          <div v-if="weatherData.current.wind_kph">
+            Velocidade do Vento: {{ weatherData.current.wind_kph }} km/h
+          </div>
+          <div v-if="weatherData.current.wind_dir">
+            Direção do Vento: {{ translateWindDirection(weatherData.current.wind_dir) }}
+          </div>
+          <div v-if="weatherData.current.air_quality">
+            Qualidade do Ar:
+            {{ translateAirQuality(weatherData.current.air_quality['us-epa-index']) }}
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="forecast-container">
+          <div
+            v-for="forecastDay in weatherData.forecast.forecastday"
+            :key="forecastDay.date"
+            class="forecast-item"
+          >
+            <p>Data: {{ formatDate(forecastDay.date) }}</p>
+            <p>Temp. Média: {{ forecastDay.day.avgtemp_c }}°C</p>
+            <p>Condição: {{ forecastDay.day.condition.text }}</p>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="data-container-title">Previsão por Hora</div>
+        <div class="forecast-hour-container">
+          <div
+            v-for="forecastHour in filteredHourlyForecast"
+            :key="forecastHour.time_epoch"
+            class="forecast-hour-item"
+          >
+            <p>{{ formatHour(forecastHour.time_epoch) }}</p>
+            <p>{{ forecastHour.temp_c }}°C</p>
+            <p v-if="forecastHour.condition?.text">{{ forecastHour.condition.text }}</p>
+            <img
+              v-if="forecastHour.condition?.icon"
+              class="forecast-hour-icon"
+              :src="forecastHour.condition.icon"
+              alt="Hourly Weather Icon"
+            />
+          </div>
+        </div>
+      </section>
     </div>
-
-    <p v-if="loading">Carregando...</p>
-
-    <section class="data-container" v-else>
-      <h3 class="data-container-title">Hoje</h3>
-
-      <div>
-        <div v-if="weatherData.current.wind_kph">
-          Velocidade do Vento: {{ weatherData.current.wind_kph }} km/h
-        </div>
-        <div v-if="weatherData.current.wind_dir">
-          Direção do Vento: {{ translateWindDirection(weatherData.current.wind_dir) }}
-        </div>
-        <div v-if="weatherData.current.air_quality">
-          Qualidade do Ar:
-          {{ translateAirQuality(weatherData.current.air_quality['us-epa-index']) }}
-        </div>
-      </div>
-    </section>
-
-    <section>
-      <div class="forecast-container">
-        <div
-          v-for="forecastDay in weatherData.forecast.forecastday"
-          :key="forecastDay.date"
-          class="forecast-item"
-        >
-          <p>Data: {{ formatDate(forecastDay.date) }}</p>
-          <p>Temp. Média: {{ forecastDay.day.avgtemp_c }}°C</p>
-          <p>Condição: {{ forecastDay.day.condition.text }}</p>
-        </div>
-      </div>
-    </section>
-
-    <section>
-      <h2 class="data-container-title">Previsão por Hora</h2>
-      <div class="forecast-hour-container">
-        <div
-          v-for="forecastHour in filteredHourlyForecast"
-          :key="forecastHour.time_epoch"
-          class="forecast-hour-item"
-        >
-          <p>{{ formatHour(forecastHour.time_epoch) }}</p>
-          <p>{{ forecastHour.temp_c }}°C</p>
-          <p v-if="forecastHour.condition?.text">{{ forecastHour.condition.text }}</p>
-          <img
-            v-if="forecastHour.condition?.icon"
-            class="forecast-hour-icon"
-            :src="forecastHour.condition.icon"
-            alt="Hourly Weather Icon"
-          />
-        </div>
-      </div>
-    </section>
-
-    <button @click="getCurrentLocation" :disabled="loading">Atualizar Localização</button>
   </div>
 </template>
 
@@ -414,7 +417,6 @@ button {
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  margin-top: 10px;
 }
 
 button:hover {
@@ -444,6 +446,13 @@ li a {
 
 li:hover {
   background-color: #ddd;
+}
+
+.main-info {
+  padding: 0px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .container {
@@ -484,7 +493,7 @@ li:hover {
 
 .data-container-title {
   display: flex;
-  margin-bottom: 10px;
+  font-size: 20px;
 }
 
 .last-updated {
@@ -503,7 +512,6 @@ li:hover {
   display: flex;
   flex-direction: column;
   padding: 10px;
-  margin-top: 10px;
   border: 1px solid #ddd;
   border-radius: 5px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
