@@ -417,7 +417,7 @@ li:hover {
 
 .last-updated {
   font-size: 12px;
-  color: #d3d3d3;
+  color: #f3f1f1be;
   margin-top: 12px;
 }
 
