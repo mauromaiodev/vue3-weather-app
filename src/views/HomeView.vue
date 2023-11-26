@@ -17,12 +17,15 @@
           </div>
         </div>
       </div>
-      <p v-if="weatherData.current.condition.text">
-        {{ weatherData.current.condition.text }}
-      </p>
-      <p v-if="weatherData.current.feelslike_c">
-        Sensação Termica: {{ weatherData.current.feelslike_c }}°C
-      </p>
+
+      <div class="current-weather-description">
+        <p v-if="weatherData.current.feelslike_c">
+          Sensação Termica: {{ weatherData.current.feelslike_c }}°C
+        </p>
+        <p v-if="weatherData.current.condition.text">
+          {{ weatherData.current.condition.text }}
+        </p>
+      </div>
     </section>
 
     <div class="search-container">
@@ -372,7 +375,7 @@ li:hover {
 }
 
 .weather-container {
-  padding: 16px 16px 0px 16px;
+  padding: 10px 0px;
   display: flex;
   flex-direction: column;
 }
@@ -385,6 +388,10 @@ li:hover {
   display: flex;
   flex-direction: row;
   gap: 20px;
+}
+
+.current-weather-description {
+  font-size: 16px;
 }
 
 .current-weather-icon {
