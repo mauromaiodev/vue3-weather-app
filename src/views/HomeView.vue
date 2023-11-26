@@ -26,7 +26,8 @@
           {{ weatherData.current.condition.text }}
         </div>
         <div v-if="weatherData.current.last_updated" class="last-updated">
-          Atualizado {{ formatLastUpdated(weatherData.current.last_updated) }}
+          Atualizado
+          {{ formatLastUpdated(weatherData.current.last_updated, weatherData.location.localTime) }}
         </div>
       </div>
     </section>
@@ -91,6 +92,7 @@ interface Location {
   name: string
   region: string
   country: string
+  localTime: string
 }
 
 interface CurrentWeather {
@@ -141,7 +143,8 @@ const weatherData = ref<WeatherData>({
   location: {
     name: '',
     region: '',
-    country: ''
+    country: '',
+    localTime: ''
   },
   current: {
     temp_c: 0,
@@ -215,7 +218,8 @@ const getWeatherByCity = async () => {
         location: {
           name: currentData.location.name,
           region: currentData.location.region,
-          country: currentData.location.country
+          country: currentData.location.country,
+          localTime: currentData.location.localtime
         },
         current: {
           temp_c: currentData.current.temp_c,
@@ -266,7 +270,8 @@ const fetchWeatherData = async (latitude: number, longitude: number) => {
       location: {
         name: currentData.location.name,
         region: currentData.location.region,
-        country: currentData.location.country
+        country: currentData.location.country,
+        localTime: currentData.location.localtime
       },
       current: {
         temp_c: currentData.current.temp_c,
