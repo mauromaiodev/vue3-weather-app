@@ -17,6 +17,12 @@
           </div>
         </div>
       </div>
+      <p v-if="weatherData.current.condition.text">
+        {{ weatherData.current.condition.text }}
+      </p>
+      <p v-if="weatherData.current.feelslike_c">
+        Sensação Termica: {{ weatherData.current.feelslike_c }}°C
+      </p>
     </section>
 
     <div class="search-container">
@@ -36,9 +42,6 @@
     <section class="data-container" v-else>
       <h3 class="data-container-title">Hoje</h3>
 
-      <p v-if="weatherData.current.condition.text">
-        Condição: {{ weatherData.current.condition.text }}
-      </p>
       <p v-if="weatherData.current.wind_kph">
         Velocidade do Vento: {{ weatherData.current.wind_kph }} km/h
       </p>
@@ -82,6 +85,7 @@ interface Location {
 
 interface CurrentWeather {
   temp_c: number
+  feelslike_c: number
   condition: {
     text: string
     icon: string
@@ -130,6 +134,7 @@ const weatherData = ref<WeatherData>({
   },
   current: {
     temp_c: 0,
+    feelslike_c: 0,
     condition: {
       text: '',
       icon: ''
@@ -202,6 +207,7 @@ const getWeatherByCity = async () => {
         },
         current: {
           temp_c: currentData.current.temp_c,
+          feelslike_c: currentData.current.feelslike_c,
           condition: {
             text: currentData.current.condition.text,
             icon: currentData.current.condition.icon
@@ -251,6 +257,7 @@ const fetchWeatherData = async (latitude: number, longitude: number) => {
       },
       current: {
         temp_c: currentData.current.temp_c,
+        feelslike_c: currentData.current.feelslike_c,
         condition: {
           text: currentData.current.condition.text,
           icon: currentData.current.condition.icon
@@ -366,6 +373,8 @@ li:hover {
 
 .weather-container {
   padding: 16px 16px 0px 16px;
+  display: flex;
+  flex-direction: column;
 }
 .current-weather-container {
   display: flex;
