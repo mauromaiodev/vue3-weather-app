@@ -25,6 +25,9 @@
         <p v-if="weatherData.current.condition.text">
           {{ weatherData.current.condition.text }}
         </p>
+        <p v-if="weatherData.current.last_updated">
+          Atualizado {{ formatLastUpdated(weatherData.current.last_updated) }}
+        </p>
       </div>
     </section>
 
@@ -77,6 +80,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import { formatDate } from '../helpers/formatDate'
+import { formatLastUpdated } from '../helpers/formatLastUpdated'
 import { translateAirQuality } from '../helpers/translateAirQuality'
 import { translateWindDirection } from '../helpers/translateWindDirection'
 
@@ -89,6 +93,7 @@ interface Location {
 interface CurrentWeather {
   temp_c: number
   feelslike_c: number
+  last_updated: string
   condition: {
     text: string
     icon: string
@@ -138,6 +143,7 @@ const weatherData = ref<WeatherData>({
   current: {
     temp_c: 0,
     feelslike_c: 0,
+    last_updated: '',
     condition: {
       text: '',
       icon: ''
@@ -211,6 +217,7 @@ const getWeatherByCity = async () => {
         current: {
           temp_c: currentData.current.temp_c,
           feelslike_c: currentData.current.feelslike_c,
+          last_updated: currentData.current.last_updated,
           condition: {
             text: currentData.current.condition.text,
             icon: currentData.current.condition.icon
@@ -260,6 +267,7 @@ const fetchWeatherData = async (latitude: number, longitude: number) => {
       },
       current: {
         temp_c: currentData.current.temp_c,
+        last_updated: currentData.current.last_updated,
         feelslike_c: currentData.current.feelslike_c,
         condition: {
           text: currentData.current.condition.text,
