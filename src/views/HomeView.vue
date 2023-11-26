@@ -19,15 +19,15 @@
       </div>
 
       <div class="current-weather-description">
-        <p v-if="weatherData.current.feelslike_c">
+        <div v-if="weatherData.current.feelslike_c">
           Sensação Termica: {{ weatherData.current.feelslike_c }}°C
-        </p>
-        <p v-if="weatherData.current.condition.text">
+        </div>
+        <div v-if="weatherData.current.condition.text">
           {{ weatherData.current.condition.text }}
-        </p>
-        <p v-if="weatherData.current.last_updated">
+        </div>
+        <div v-if="weatherData.current.last_updated" class="last-updated">
           Atualizado {{ formatLastUpdated(weatherData.current.last_updated) }}
-        </p>
+        </div>
       </div>
     </section>
 
@@ -48,15 +48,18 @@
     <section class="data-container" v-else>
       <h3 class="data-container-title">Hoje</h3>
 
-      <p v-if="weatherData.current.wind_kph">
-        Velocidade do Vento: {{ weatherData.current.wind_kph }} km/h
-      </p>
-      <p v-if="weatherData.current.wind_dir">
-        Direção do Vento: {{ translateWindDirection(weatherData.current.wind_dir) }}
-      </p>
-      <p v-if="weatherData.current.air_quality">
-        Qualidade do Ar: {{ translateAirQuality(weatherData.current.air_quality['us-epa-index']) }}
-      </p>
+      <div>
+        <div v-if="weatherData.current.wind_kph">
+          Velocidade do Vento: {{ weatherData.current.wind_kph }} km/h
+        </div>
+        <div v-if="weatherData.current.wind_dir">
+          Direção do Vento: {{ translateWindDirection(weatherData.current.wind_dir) }}
+        </div>
+        <div v-if="weatherData.current.air_quality">
+          Qualidade do Ar:
+          {{ translateAirQuality(weatherData.current.air_quality['us-epa-index']) }}
+        </div>
+      </div>
     </section>
 
     <section>
@@ -399,7 +402,7 @@ li:hover {
 }
 
 .current-weather-description {
-  font-size: 16px;
+  font-size: 13px;
 }
 
 .current-weather-icon {
@@ -410,6 +413,12 @@ li:hover {
 .data-container-title {
   display: flex;
   margin-bottom: 10px;
+}
+
+.last-updated {
+  font-size: 12px;
+  color: #d3d3d3;
+  margin-top: 12px;
 }
 
 .search-container {
