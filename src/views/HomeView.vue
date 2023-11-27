@@ -65,6 +65,9 @@
               Qualidade do Ar:
               {{ translateAirQuality(weatherData.current.air_quality['us-epa-index']) }}
             </div>
+            <div v-if="weatherData.current.humidity">
+              Umidade: {{ weatherData.current.humidity }}%
+            </div>
           </div>
         </section>
 
@@ -134,6 +137,7 @@ interface CurrentWeather {
   air_quality: {
     'us-epa-index': number
   }
+  humidity: number
 }
 
 interface Forecast {
@@ -188,6 +192,7 @@ const weatherData = ref<WeatherData>({
       text: '',
       icon: ''
     },
+    humidity: 0,
     wind_kph: 0,
     wind_dir: '',
     air_quality: {
@@ -259,6 +264,7 @@ const getWeatherByCity = async () => {
           temp_c: currentData.current.temp_c,
           feelslike_c: currentData.current.feelslike_c,
           last_updated: currentData.current.last_updated,
+          humidity: currentData.current.humidity,
           condition: {
             text: currentData.current.condition.text,
             icon: currentData.current.condition.icon
@@ -311,6 +317,7 @@ const fetchWeatherData = async (latitude: number, longitude: number) => {
         temp_c: currentData.current.temp_c,
         last_updated: currentData.current.last_updated,
         feelslike_c: currentData.current.feelslike_c,
+        humidity: currentData.current.humidity,
         condition: {
           text: currentData.current.condition.text,
           icon: currentData.current.condition.icon
