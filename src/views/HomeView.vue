@@ -72,20 +72,6 @@
         </section>
 
         <section>
-          <div class="forecast-container">
-            <div
-              v-for="forecastDay in weatherData.forecast.forecastday"
-              :key="forecastDay.date"
-              class="forecast-item"
-            >
-              <div>Data: {{ formatDate(forecastDay.date) }}</div>
-              <div>Temp. Média: {{ forecastDay.day.avgtemp_c }}°C</div>
-              <div>Condição: {{ forecastDay.day.condition.text }}</div>
-            </div>
-          </div>
-        </section>
-
-        <section>
           <div class="data-container-title">Previsão por Hora</div>
           <div class="forecast-hour-container">
             <div
@@ -102,6 +88,21 @@
                 :src="forecastHour.condition.icon"
                 alt="Hourly Weather Icon"
               />
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <div class="data-container-title">Previsão da Semana</div>
+          <div class="forecast-container">
+            <div
+              v-for="forecastDay in weatherData.forecast.forecastday"
+              :key="forecastDay.date"
+              class="forecast-item"
+            >
+              <div>Data: {{ formatDate(forecastDay.date) }}</div>
+              <div>Temp. Média: {{ forecastDay.day.avgtemp_c }}°C</div>
+              <div>Condição: {{ forecastDay.day.condition.text }}</div>
             </div>
           </div>
         </section>
@@ -458,7 +459,7 @@ li:hover {
 }
 
 .main-info {
-  padding: 0px 10px;
+  padding: 10px;
   display: flex;
   flex-direction: column;
   gap: 10px;
