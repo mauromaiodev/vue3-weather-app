@@ -94,15 +94,11 @@
 
         <section>
           <div class="data-container-title">Previsão da Semana</div>
-          <div class="forecast-container">
-            <div
-              v-for="forecastDay in weatherData.forecast.forecastday"
-              :key="forecastDay.date"
-              class="forecast-item"
-            >
-              <div>Data: {{ formatDate(forecastDay.date) }}</div>
-              <div>Temp. Média: {{ forecastDay.day.avgtemp_c }}°C</div>
-              <div>Condição: {{ forecastDay.day.condition.text }}</div>
+          <div class="forecast-week-container">
+            <div v-for="day in filteredWeekForecast" :key="day.date" class="forecast-week-item">
+              <div>{{ formatDate(day.date) }}</div>
+              <div>{{ day.day.avgtemp_c }}°C</div>
+              <div>{{ day.day.condition.text }}</div>
             </div>
           </div>
         </section>
@@ -416,6 +412,13 @@ const currentIndex = computed(() => {
 const filteredHourlyForecast = computed(() => {
   return getHourlyForecast.value.slice(currentIndex.value)
 })
+
+const filteredWeekForecast = computed(() => {
+  const weekForecast = [...weatherData.value.forecast.forecastday]
+  weekForecast.shift()
+  console.log('🚀 ~ file: HomeView.vue:418 ~ filteredWeekForecast ~ weekForecast:', weekForecast)
+  return weekForecast
+})
 </script>
 
 <style scoped>
@@ -533,16 +536,16 @@ li:hover {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.forecast-container {
+.forecast-week-container {
   display: flex;
-  overflow-x: auto;
+  flex-direction: column;
+  gap: 8px;
 }
 
-.forecast-item {
-  flex: 0 0 auto;
-  width: 200px;
+.forecast-week-item {
+  display: flex;
+  flex-direction: column;
   padding: 10px;
-  margin-right: 10px;
   border: 1px solid #ddd;
   border-radius: 5px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
