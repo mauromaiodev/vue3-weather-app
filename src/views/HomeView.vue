@@ -53,9 +53,13 @@
         <div>
           <h3>Favoritos</h3>
           <ul style="position: relative">
-            <li v-for="city in favoritesStore.favoriteCities" :key="city" class="list-item">
-              <div>{{ city }}</div>
-              <button @click="removeFromFavorites(city)" class="remove-button">X</button>
+            <li
+              v-for="cityData in favoritesStore.favoriteCities"
+              :key="cityData.city"
+              class="list-item"
+            >
+              <div>{{ cityData.city }} / {{ cityData.temp_c }}°C</div>
+              <button @click="removeFromFavorites(cityData)" class="remove-button">X</button>
             </li>
           </ul>
         </div>
@@ -208,13 +212,18 @@ const forecastApiUrl = 'https://api.weatherapi.com/v1/forecast.json'
 const favoritesStore = useFavoritesStore()
 
 const toggleFavoriteCity = () => {
-  const city = weatherData.value.location.name
-  favoritesStore.toggleFavoriteCity(city)
+  const { name } = weatherData.value.location
+  const { temp_c } = weatherData.value.current
+  favoritesStore.toggleFavoriteCity({ city: name, temp_c })
 }
 
-const isFavoriteCity = computed(() => favoritesStore.isCityFavorite(selectedCity.value))
-const removeFromFavorites = (city: string) => {
-  favoritesStore.toggleFavoriteCity(city)
+const isFavoriteCity = computed(() => {
+  const { name } = weatherData.value.location
+  return favoritesStore.isCityFavorite(name)
+})
+
+const removeFromFavorites = (cityData: { city: string; temp_c: number }) => {
+  favoritesStore.toggleFavoriteCity({ city: cityData.city, temp_c: cityData.temp_c })
 }
 
 const weatherData = ref<WeatherData>({
