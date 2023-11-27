@@ -40,7 +40,7 @@
 
     <div class="main-info">
       <section class="search-container">
-        <label for="cityInput">Digite o nome da cidade:</label>
+        <label for="cityInput">Digite o nome da Cidade/Estado/País:</label>
         <input v-model="selectedCity" id="cityInput" type="text" @input="handleInput" />
         <ul v-if="suggestedCities.length" style="position: relative">
           <li v-for="city in suggestedCities" :key="city.name">
