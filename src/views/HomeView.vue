@@ -229,90 +229,19 @@ onMounted(() => {
   getCurrentLocation()
 })
 
-const getCurrentLocation = () => {
+const getWeatherData = async (latitude?: number, longitude?: number, city?: string) => {
   loading.value = true
 
-  setTimeout(async () => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        async (position) => {
-          const { latitude, longitude } = position.coords
-          await fetchWeatherData(latitude, longitude)
-
-          const currentHour = new Date().getHours()
-          isDay.value = currentHour >= 6 && currentHour < 18
-        },
-        (err: GeolocationPositionError) => {
-          console.error('Erro ao obter localização:', err.message)
-          loading.value = false
-        }
-      )
-    } else {
-      console.error('Geolocalização não suportada no seu navegador.')
-      loading.value = false
-    }
-  }, 1000)
-}
-
-const getWeatherByCity = async () => {
-  if (selectedCity.value) {
-    loading.value = true
-    try {
-      const [currentResponse, forecastResponse] = await Promise.all([
-        fetch(`${currentWeatherApiUrl}?key=${apiKey}&q=${selectedCity.value}&lang=pt&aqi=yes`),
-        fetch(`${forecastApiUrl}?key=${apiKey}&q=${selectedCity.value}&lang=pt&aqi=yes&days=4`)
-      ])
-
-      const currentData = await currentResponse.json()
-      const forecastData = await forecastResponse.json()
-
-      console.log('Dados do clima recebidos com sucesso:', currentData, forecastData)
-
-      weatherData.value = {
-        location: {
-          name: currentData.location.name,
-          region: currentData.location.region,
-          country: currentData.location.country,
-          localTime: currentData.location.localtime
-        },
-        current: {
-          temp_c: currentData.current.temp_c,
-          feelslike_c: currentData.current.feelslike_c,
-          last_updated: currentData.current.last_updated,
-          humidity: currentData.current.humidity,
-          condition: {
-            text: currentData.current.condition.text,
-            icon: currentData.current.condition.icon
-          },
-          wind_kph: currentData.current.wind_kph,
-          wind_dir: currentData.current.wind_dir,
-          air_quality: {
-            'us-epa-index': currentData.current.air_quality['us-epa-index']
-          }
-        },
-        forecast: {
-          forecastday: forecastData.forecast.forecastday
-        }
-      }
-
-      const currentHour = new Date(currentData.location.localtime).getHours()
-      isDay.value = currentHour >= 6 && currentHour < 18
-    } catch (err: any) {
-      console.error('Erro ao obter dados do clima:', err.message)
-      error.value = err.message
-    } finally {
-      loading.value = false
-    }
-  } else {
-    console.error('Digite o nome da cidade antes de verificar o tempo.')
-  }
-}
-
-const fetchWeatherData = async (latitude: number, longitude: number) => {
   try {
+    const url = city
+      ? `${currentWeatherApiUrl}?key=${apiKey}&q=${city}&lang=pt&aqi=yes`
+      : `${currentWeatherApiUrl}?key=${apiKey}&q=${latitude},${longitude}&lang=pt&aqi=yes`
+
     const [currentResponse, forecastResponse] = await Promise.all([
-      fetch(`${currentWeatherApiUrl}?key=${apiKey}&q=${latitude},${longitude}&lang=pt&aqi=yes`),
-      fetch(`${forecastApiUrl}?key=${apiKey}&q=${latitude},${longitude}&lang=pt&aqi=yes&days=4`)
+      fetch(url),
+      fetch(
+        `${forecastApiUrl}?key=${apiKey}&q=${city || latitude},${longitude}&lang=pt&aqi=yes&days=4`
+      )
     ])
 
     const currentData = await currentResponse.json()
@@ -329,8 +258,8 @@ const fetchWeatherData = async (latitude: number, longitude: number) => {
       },
       current: {
         temp_c: currentData.current.temp_c,
-        last_updated: currentData.current.last_updated,
         feelslike_c: currentData.current.feelslike_c,
+        last_updated: currentData.current.last_updated,
         humidity: currentData.current.humidity,
         condition: {
           text: currentData.current.condition.text,
@@ -343,31 +272,47 @@ const fetchWeatherData = async (latitude: number, longitude: number) => {
         }
       },
       forecast: {
-        forecastday: forecastData.forecast.forecastday.map((day: any) => ({
-          date: day.date,
-          day: {
-            avgtemp_c: day.day.avgtemp_c,
-            condition: {
-              text: day.day.condition.text,
-              icon: day.day.condition.icon
-            }
-          },
-          hour: day.hour.map((hour: any) => ({
-            time: hour.time,
-            temp_c: hour.temp_c,
-            condition: {
-              text: hour.condition.text,
-              icon: hour.condition.icon
-            }
-          }))
-        }))
+        forecastday: forecastData.forecast.forecastday
       }
     }
+
+    const currentHour = new Date(currentData.location.localtime).getHours()
+    isDay.value = currentHour >= 6 && currentHour < 18
   } catch (err: any) {
     console.error('Erro ao obter dados do clima:', err.message)
     error.value = err.message
   } finally {
     loading.value = false
+  }
+}
+
+const getCurrentLocation = () => {
+  loading.value = true
+
+  setTimeout(async () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        async (position) => {
+          const { latitude, longitude } = position.coords
+          await getWeatherData(latitude, longitude)
+        },
+        (err: GeolocationPositionError) => {
+          console.error('Erro ao obter localização:', err.message)
+          loading.value = false
+        }
+      )
+    } else {
+      console.error('Geolocalização não suportada no seu navegador.')
+      loading.value = false
+    }
+  }, 1000)
+}
+
+const getWeatherByCity = async () => {
+  if (selectedCity.value) {
+    await getWeatherData(undefined, undefined, selectedCity.value)
+  } else {
+    console.error('Digite o nome da cidade antes de verificar o tempo.')
   }
 }
 
