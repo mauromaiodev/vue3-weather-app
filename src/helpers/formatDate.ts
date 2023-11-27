@@ -8,5 +8,5 @@ export const formatDate = (rawDate: string): string => {
   const formattedDayOfWeek = dayOfWeek.charAt(0).toUpperCase() + dayOfWeek.slice(1).toLowerCase()
   const formattedMonth = month.charAt(0).toUpperCase() + month.slice(1).toLowerCase()
 
-  return `${formattedDayOfWeek}, ${day} ${formattedMonth}.`
+  return `${formattedDayOfWeek}, ${day} ${formattedMonth}`
 }
