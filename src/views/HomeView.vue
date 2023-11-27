@@ -99,6 +99,24 @@
               <div>{{ formatDate(day.date) }}</div>
               <div>{{ day.day.avgtemp_c }}°C</div>
               <div>{{ day.day.condition.text }}</div>
+
+              <div class="forecast-hour-container">
+                <div
+                  v-for="forecastHour in day.hour"
+                  :key="forecastHour.time_epoch"
+                  class="forecast-hour-item"
+                >
+                  <div>{{ formatHour(forecastHour.time_epoch) }}</div>
+                  <div>{{ forecastHour.temp_c }}°C</div>
+                  <div v-if="forecastHour.condition?.text">{{ forecastHour.condition.text }}</div>
+                  <img
+                    v-if="forecastHour.condition?.icon"
+                    class="forecast-hour-icon"
+                    :src="forecastHour.condition.icon"
+                    alt="Hourly Weather Icon"
+                  />
+                </div>
+              </div>
             </div>
           </div>
         </section>
@@ -278,7 +296,6 @@ const getWeatherByCity = async () => {
       }
 
       const currentHour = new Date(currentData.location.localtime).getHours()
-      console.log('🚀 ~ currentHour:', currentHour)
       isDay.value = currentHour >= 6 && currentHour < 18
     } catch (err: any) {
       console.error('Erro ao obter dados do clima:', err.message)
@@ -416,7 +433,6 @@ const filteredHourlyForecast = computed(() => {
 const filteredWeekForecast = computed(() => {
   const weekForecast = [...weatherData.value.forecast.forecastday]
   weekForecast.shift()
-  console.log('🚀 ~ file: HomeView.vue:418 ~ filteredWeekForecast ~ weekForecast:', weekForecast)
   return weekForecast
 })
 </script>
