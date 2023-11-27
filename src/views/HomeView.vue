@@ -1,11 +1,14 @@
 <template>
   <div class="container">
     <section class="weather-container" :class="{ 'day-theme': isDay, 'night-theme': !isDay }">
-      <div>
+      <div class="weather-header">
         <h2 v-if="weatherData.location.name">
           {{ weatherData.location.name }}, {{ weatherData.location.region }}
         </h2>
-        <button @click="getCurrentLocation" :disabled="loading">Atualizar Localização</button>
+        <button @click="getCurrentLocation" :disabled="loading">
+          <i class="loading-icon" v-if="loading"></i>
+          Atualizar
+        </button>
       </div>
 
       <div class="current-weather-container">
@@ -455,6 +458,33 @@ li a {
 
 li:hover {
   background-color: #ddd;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.weather-header {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  justify-content: space-evenly;
+}
+
+.loading-icon {
+  display: inline-block;
+  border: 4px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top: 4px solid #333;
+  width: 16px;
+  height: 16px;
+  animation: spin 1s linear infinite;
+  margin-right: 8px;
 }
 
 .main-info {
