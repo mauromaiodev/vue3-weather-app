@@ -139,7 +139,7 @@
 </template>
 
 <script setup lang="ts">
-import { useFavoritesStore } from '@/favorites'
+import { useFavoritesStore } from '@/useFavoritesStore'
 import { computed, onMounted, ref } from 'vue'
 import { formatDate } from '../helpers/formatDate'
 import { formatLastUpdated } from '../helpers/formatLastUpdated'
