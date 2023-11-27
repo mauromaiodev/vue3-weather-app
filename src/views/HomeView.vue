@@ -50,57 +50,59 @@
 
       <div v-if="loading">Carregando...</div>
 
-      <section v-else>
-        <div class="data-container-title">Hoje</div>
+      <div class="data-container-main" v-else>
+        <section>
+          <div class="data-container-title">Hoje</div>
 
-        <div class="data-container">
-          <div v-if="weatherData.current.wind_kph">
-            Velocidade do Vento: {{ weatherData.current.wind_kph }} km/h
+          <div class="data-container">
+            <div v-if="weatherData.current.wind_kph">
+              Velocidade do Vento: {{ weatherData.current.wind_kph }} km/h
+            </div>
+            <div v-if="weatherData.current.wind_dir">
+              Direção do Vento: {{ translateWindDirection(weatherData.current.wind_dir) }}
+            </div>
+            <div v-if="weatherData.current.air_quality">
+              Qualidade do Ar:
+              {{ translateAirQuality(weatherData.current.air_quality['us-epa-index']) }}
+            </div>
           </div>
-          <div v-if="weatherData.current.wind_dir">
-            Direção do Vento: {{ translateWindDirection(weatherData.current.wind_dir) }}
-          </div>
-          <div v-if="weatherData.current.air_quality">
-            Qualidade do Ar:
-            {{ translateAirQuality(weatherData.current.air_quality['us-epa-index']) }}
-          </div>
-        </div>
-      </section>
+        </section>
 
-      <section>
-        <div class="forecast-container">
-          <div
-            v-for="forecastDay in weatherData.forecast.forecastday"
-            :key="forecastDay.date"
-            class="forecast-item"
-          >
-            <p>Data: {{ formatDate(forecastDay.date) }}</p>
-            <p>Temp. Média: {{ forecastDay.day.avgtemp_c }}°C</p>
-            <p>Condição: {{ forecastDay.day.condition.text }}</p>
+        <section>
+          <div class="forecast-container">
+            <div
+              v-for="forecastDay in weatherData.forecast.forecastday"
+              :key="forecastDay.date"
+              class="forecast-item"
+            >
+              <p>Data: {{ formatDate(forecastDay.date) }}</p>
+              <p>Temp. Média: {{ forecastDay.day.avgtemp_c }}°C</p>
+              <p>Condição: {{ forecastDay.day.condition.text }}</p>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      <section>
-        <div class="data-container-title">Previsão por Hora</div>
-        <div class="forecast-hour-container">
-          <div
-            v-for="forecastHour in filteredHourlyForecast"
-            :key="forecastHour.time_epoch"
-            class="forecast-hour-item"
-          >
-            <p>{{ formatHour(forecastHour.time_epoch) }}</p>
-            <p>{{ forecastHour.temp_c }}°C</p>
-            <p v-if="forecastHour.condition?.text">{{ forecastHour.condition.text }}</p>
-            <img
-              v-if="forecastHour.condition?.icon"
-              class="forecast-hour-icon"
-              :src="forecastHour.condition.icon"
-              alt="Hourly Weather Icon"
-            />
+        <section>
+          <div class="data-container-title">Previsão por Hora</div>
+          <div class="forecast-hour-container">
+            <div
+              v-for="forecastHour in filteredHourlyForecast"
+              :key="forecastHour.time_epoch"
+              class="forecast-hour-item"
+            >
+              <p>{{ formatHour(forecastHour.time_epoch) }}</p>
+              <p>{{ forecastHour.temp_c }}°C</p>
+              <p v-if="forecastHour.condition?.text">{{ forecastHour.condition.text }}</p>
+              <img
+                v-if="forecastHour.condition?.icon"
+                class="forecast-hour-icon"
+                :src="forecastHour.condition.icon"
+                alt="Hourly Weather Icon"
+              />
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      </div>
     </div>
   </div>
 </template>
@@ -464,6 +466,12 @@ li:hover {
 
 .current-temp {
   font-size: 40px;
+}
+
+.data-container-main {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .weather-container {
