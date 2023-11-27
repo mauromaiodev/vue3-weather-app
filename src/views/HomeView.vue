@@ -246,7 +246,7 @@ const getWeatherByCity = async () => {
     try {
       const [currentResponse, forecastResponse] = await Promise.all([
         fetch(`${currentWeatherApiUrl}?key=${apiKey}&q=${selectedCity.value}&lang=pt&aqi=yes`),
-        fetch(`${forecastApiUrl}?key=${apiKey}&q=${selectedCity.value}&lang=pt&aqi=yes&days=1`)
+        fetch(`${forecastApiUrl}?key=${apiKey}&q=${selectedCity.value}&lang=pt&aqi=yes&days=4`)
       ])
 
       const currentData = await currentResponse.json()
@@ -299,7 +299,7 @@ const fetchWeatherData = async (latitude: number, longitude: number) => {
   try {
     const [currentResponse, forecastResponse] = await Promise.all([
       fetch(`${currentWeatherApiUrl}?key=${apiKey}&q=${latitude},${longitude}&lang=pt&aqi=yes`),
-      fetch(`${forecastApiUrl}?key=${apiKey}&q=${latitude},${longitude}&lang=pt&aqi=yes&days=1`)
+      fetch(`${forecastApiUrl}?key=${apiKey}&q=${latitude},${longitude}&lang=pt&aqi=yes&days=4`)
     ])
 
     const currentData = await currentResponse.json()
