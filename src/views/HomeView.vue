@@ -406,8 +406,6 @@ const filteredWeekForecast = computed(() => {
   weekForecast.shift()
   return weekForecast
 })
-
-console.log('Favorite Cities:', favoritesStore.favoriteCities)
 </script>
 
 <style scoped>
