@@ -75,9 +75,9 @@
               :key="forecastDay.date"
               class="forecast-item"
             >
-              <p>Data: {{ formatDate(forecastDay.date) }}</p>
-              <p>Temp. Média: {{ forecastDay.day.avgtemp_c }}°C</p>
-              <p>Condição: {{ forecastDay.day.condition.text }}</p>
+              <div>Data: {{ formatDate(forecastDay.date) }}</div>
+              <div>Temp. Média: {{ forecastDay.day.avgtemp_c }}°C</div>
+              <div>Condição: {{ forecastDay.day.condition.text }}</div>
             </div>
           </div>
         </section>
@@ -90,9 +90,9 @@
               :key="forecastHour.time_epoch"
               class="forecast-hour-item"
             >
-              <p>{{ formatHour(forecastHour.time_epoch) }}</p>
-              <p>{{ forecastHour.temp_c }}°C</p>
-              <p v-if="forecastHour.condition?.text">{{ forecastHour.condition.text }}</p>
+              <div>{{ formatHour(forecastHour.time_epoch) }}</div>
+              <div>{{ forecastHour.temp_c }}°C</div>
+              <div v-if="forecastHour.condition?.text">{{ forecastHour.condition.text }}</div>
               <img
                 v-if="forecastHour.condition?.icon"
                 class="forecast-hour-icon"
