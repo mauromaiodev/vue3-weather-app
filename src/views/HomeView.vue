@@ -46,6 +46,19 @@
         </ul>
 
         <button @click="getWeatherByCity">Verificar Tempo</button>
+        <button @click="toggleFavoriteCity" :class="{ 'favorite-button': isFavoriteCity }">
+          Favoritar
+        </button>
+
+        <div>
+          <h3>Favoritos</h3>
+          <ul style="position: relative">
+            <li v-for="city in favoritesStore.favoriteCities" :key="city" class="list-item">
+              <div>{{ city }}</div>
+              <button @click="removeFromFavorites(city)" class="remove-button">X</button>
+            </li>
+          </ul>
+        </div>
       </section>
 
       <div v-if="loading">Carregando...</div>
@@ -126,6 +139,7 @@
 </template>
 
 <script setup lang="ts">
+import { useFavoritesStore } from '@/favorites'
 import { computed, onMounted, ref } from 'vue'
 import { formatDate } from '../helpers/formatDate'
 import { formatLastUpdated } from '../helpers/formatLastUpdated'
@@ -191,6 +205,17 @@ interface SuggestedCity {
 const apiKey = import.meta.env.VITE_API_KEY
 const currentWeatherApiUrl = 'https://api.weatherapi.com/v1/current.json'
 const forecastApiUrl = 'https://api.weatherapi.com/v1/forecast.json'
+const favoritesStore = useFavoritesStore()
+
+const toggleFavoriteCity = () => {
+  const city = weatherData.value.location.name
+  favoritesStore.toggleFavoriteCity(city)
+}
+
+const isFavoriteCity = computed(() => favoritesStore.isCityFavorite(selectedCity.value))
+const removeFromFavorites = (city: string) => {
+  favoritesStore.toggleFavoriteCity(city)
+}
 
 const weatherData = ref<WeatherData>({
   location: {
@@ -531,6 +556,36 @@ li:hover {
 .forecast-hour-icon {
   width: 30px;
   height: 30px;
+}
+.list-item {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.list-item div {
+  text-decoration: none;
+  color: #333;
+  display: block;
+}
+
+.list-item:hover {
+  background-color: #ddd;
+}
+
+.remove-button {
+  background-color: #ff3333;
+  color: #fff;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.remove-button:hover {
+  background-color: #cc0000;
 }
 
 .day-theme {
