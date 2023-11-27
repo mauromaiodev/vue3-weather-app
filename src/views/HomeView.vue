@@ -415,7 +415,9 @@ const getHourlyForecast = computed(() => {
 
 const formatHour = (timeEpoch: number) => {
   const date = new Date(timeEpoch * 1000)
-  return `${date.getHours()}:${String(date.getMinutes()).padStart(2, '0')}`
+  const formattedHour = `${date.getHours()}:${String(date.getMinutes()).padStart(2, '0')}`
+
+  return formattedHour
 }
 
 const currentIndex = computed(() => {
