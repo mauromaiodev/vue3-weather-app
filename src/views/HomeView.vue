@@ -76,10 +76,10 @@
           <div class="forecast-hour-container">
             <div
               v-for="forecastHour in filteredHourlyForecast"
-              :key="forecastHour.time_epoch"
+              :key="forecastHour.time"
               class="forecast-hour-item"
             >
-              <div>{{ formatHour(forecastHour.time_epoch) }}</div>
+              <div>{{ formatHour(forecastHour.time) }}</div>
               <div>{{ forecastHour.temp_c }}°C</div>
               <div v-if="forecastHour.condition?.text">{{ forecastHour.condition.text }}</div>
               <img
@@ -103,10 +103,10 @@
               <div class="forecast-hour-container">
                 <div
                   v-for="forecastHour in day.hour"
-                  :key="forecastHour.time_epoch"
+                  :key="forecastHour.time"
                   class="forecast-hour-item"
                 >
-                  <div>{{ formatHour(forecastHour.time_epoch) }}</div>
+                  <div>{{ formatHour(forecastHour.time) }}</div>
                   <div>{{ forecastHour.temp_c }}°C</div>
                   <div v-if="forecastHour.condition?.text">{{ forecastHour.condition.text }}</div>
                   <img
@@ -166,7 +166,7 @@ interface Forecast {
       }
     }
     hour: {
-      time_epoch: number
+      time: string
       temp_c: number
       condition?: {
         text: string
@@ -353,7 +353,7 @@ const fetchWeatherData = async (latitude: number, longitude: number) => {
             }
           },
           hour: day.hour.map((hour: any) => ({
-            time_epoch: hour.time_epoch,
+            time: hour.time,
             temp_c: hour.temp_c,
             condition: {
               text: hour.condition.text,
@@ -413,17 +413,16 @@ const getHourlyForecast = computed(() => {
   return weatherData.value.forecast.forecastday[0]?.hour || []
 })
 
-const formatHour = (timeEpoch: number) => {
-  const date = new Date(timeEpoch * 1000)
+const formatHour = (time: string) => {
+  const date = new Date(time)
   const formattedHour = `${date.getHours()}:${String(date.getMinutes()).padStart(2, '0')}`
-
   return formattedHour
 }
 
 const currentIndex = computed(() => {
   const currentHour = new Date().getHours()
   return getHourlyForecast.value.findIndex((hour) => {
-    const hourDate = new Date(hour.time_epoch * 1000)
+    const hourDate = new Date(hour.time)
     return hourDate.getHours() >= currentHour
   })
 })
