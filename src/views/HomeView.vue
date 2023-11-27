@@ -72,7 +72,7 @@
         </section>
 
         <section>
-          <div class="data-container-title">Previsão por Hora</div>
+          <div class="data-container-title">Previsão do dia por Hora</div>
           <div class="forecast-hour-container">
             <div
               v-for="forecastHour in filteredHourlyForecast"
