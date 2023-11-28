@@ -1,6 +1,6 @@
 <template>
   <BaseContainer>
-    <section class="weather-container" :class="{ 'day-theme': isDay, 'night-theme': !isDay }">
+    <BaseSection :class="{ 'day-theme': isDay, 'night-theme': !isDay }">
       <BaseWeatherHeader>
         <div class="location-name" v-if="weatherData.location.name">
           {{ weatherData.location.name }}, {{ weatherData.location.region }}
@@ -36,7 +36,7 @@
           {{ formatLastUpdated(weatherData.current.last_updated, weatherData.location.localTime) }}
         </div>
       </div>
-    </section>
+    </BaseSection>
 
     <BaseContainer class="main-info">
       <BaseContainer>
@@ -156,6 +156,7 @@
 import { computed, onMounted, onUnmounted, ref, toRefs, watch } from 'vue'
 
 import BaseContainer from '@/components/BaseContainer.vue'
+import BaseSection from '@/components/BaseSection.vue'
 import BaseWeatherHeader from '@/components/BaseWeatherHeader.vue'
 import {
   formatDate,
@@ -529,12 +530,6 @@ li:hover {
   display: flex;
   flex-direction: column;
   gap: 10px;
-}
-
-.weather-container {
-  padding: 10px 0px;
-  display: flex;
-  flex-direction: column;
 }
 
 .current-weather-info {
