@@ -1,17 +1,17 @@
 <template>
   <BaseContainer>
     <section class="weather-container" :class="{ 'day-theme': isDay, 'night-theme': !isDay }">
-      <div class="weather-header">
-        <h2 v-if="weatherData.location.name">
+      <BaseWeatherHeader>
+        <div class="location-name" v-if="weatherData.location.name">
           {{ weatherData.location.name }}, {{ weatherData.location.region }}
-        </h2>
+        </div>
         <button @click="getCurrentLocation" :disabled="loading">
           <i class="loading-icon" v-if="loading"></i>
           Loc. Atual
         </button>
-      </div>
+      </BaseWeatherHeader>
 
-      <div class="current-weather-container">
+      <BaseWeatherHeader>
         <div v-if="weatherData.current.temp_c" class="current-weather-info">
           <div class="current-temp">{{ weatherData.current.temp_c }}°C</div>
           <div>
@@ -22,7 +22,7 @@
             />
           </div>
         </div>
-      </div>
+      </BaseWeatherHeader>
 
       <div class="current-weather-description">
         <div v-if="weatherData.current.feelslike_c">
@@ -153,8 +153,10 @@
 </template>
 
 <script setup lang="ts">
-import BaseContainer from '@/components/BaseContainer.vue'
 import { computed, onMounted, onUnmounted, ref, toRefs, watch } from 'vue'
+
+import BaseContainer from '@/components/BaseContainer.vue'
+import BaseWeatherHeader from '@/components/BaseWeatherHeader.vue'
 import {
   formatDate,
   formatHour,
@@ -495,16 +497,13 @@ li:hover {
   }
 }
 
+.location-name {
+  font-size: 22px;
+}
+
 .favorite-list {
   position: relative;
   border-radius: 5px;
-}
-
-.weather-header {
-  display: flex;
-  flex-direction: row;
-  gap: 20px;
-  justify-content: space-evenly;
 }
 
 .loading-icon {
@@ -536,10 +535,6 @@ li:hover {
   padding: 10px 0px;
   display: flex;
   flex-direction: column;
-}
-.current-weather-container {
-  display: flex;
-  justify-content: center;
 }
 
 .current-weather-info {
