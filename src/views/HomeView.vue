@@ -719,10 +719,10 @@ li:hover {
 }
 
 .search-button {
-  background-color: #5d9be5;
+  background-color: #2162af;
 }
 .search-button:hover {
-  background-color: #5d9ae5ee;
+  background-color: #2161afcc;
 }
 
 .remove-button {
