@@ -153,12 +153,12 @@
 </template>
 
 <script setup lang="ts">
-import { useFavoritesStore } from '@/useFavoritesStore'
 import { computed, onMounted, onUnmounted, ref, toRefs, watch } from 'vue'
 import { formatDate } from '../helpers/formatDate'
 import { formatLastUpdated } from '../helpers/formatLastUpdated'
 import { translateAirQuality } from '../helpers/translateAirQuality'
 import { translateWindDirection } from '../helpers/translateWindDirection'
+import { useFavoritesStore } from '../stores/useFavoritesStore'
 
 const apiKey = import.meta.env.VITE_API_KEY
 const currentWeatherApiUrl = 'https://api.weatherapi.com/v1/current.json'
@@ -757,3 +757,4 @@ li:hover {
     color 0.5s ease;
 }
 </style>
+@/store/useFavoritesStore
