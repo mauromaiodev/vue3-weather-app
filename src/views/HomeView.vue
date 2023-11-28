@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <BaseContainer>
     <section class="weather-container" :class="{ 'day-theme': isDay, 'night-theme': !isDay }">
       <div class="weather-header">
         <h2 v-if="weatherData.location.name">
@@ -149,10 +149,11 @@
         </section>
       </div>
     </div>
-  </div>
+  </BaseContainer>
 </template>
 
 <script setup lang="ts">
+import BaseContainer from '@/components/BaseContainer.vue'
 import { computed, onMounted, onUnmounted, ref, toRefs, watch } from 'vue'
 import {
   formatDate,
