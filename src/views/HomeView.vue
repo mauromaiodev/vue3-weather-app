@@ -38,8 +38,8 @@
       </div>
     </section>
 
-    <div class="main-info">
-      <section class="search-container">
+    <BaseContainer class="main-info">
+      <BaseContainer>
         <label for="cityInput">Digite o nome da Cidade/Estado/País:</label>
         <input v-model="selectedCity" id="cityInput" type="text" @input="handleInput" />
         <ul v-if="suggestedCities.length" style="position: relative">
@@ -73,7 +73,7 @@
             </li>
           </ul>
         </div>
-      </section>
+      </BaseContainer>
 
       <div v-if="loading">Carregando...</div>
 
@@ -148,7 +148,7 @@
           </div>
         </section>
       </div>
-    </div>
+    </BaseContainer>
   </BaseContainer>
 </template>
 
@@ -446,7 +446,7 @@ const filteredWeekForecast = computed(() => {
 })
 </script>
 
-<style scoped>
+<style>
 button {
   background-color: #4caf50;
   color: white;
@@ -520,9 +520,6 @@ li:hover {
 
 .main-info {
   padding: 10px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
 }
 
 .current-temp {
@@ -569,12 +566,6 @@ li:hover {
   font-size: 12px;
   color: #f3f1f1be;
   margin-top: 12px;
-}
-
-.search-container {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
 }
 
 .data-container {
