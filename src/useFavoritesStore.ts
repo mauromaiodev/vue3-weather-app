@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 
 interface FavoritesState {
-  favoriteCities: { city: string; temp_c: number }[]
+  favoriteCities: { city: string; region: string; country: string; temp_c: number }[]
 }
 
 export const useFavoritesStore = defineStore('favorites', {
@@ -10,8 +10,13 @@ export const useFavoritesStore = defineStore('favorites', {
   }),
 
   actions: {
-    toggleFavoriteCity(cityData: { city: string; temp_c: number }): void {
-      const { city, temp_c } = cityData
+    toggleFavoriteCity(cityData: {
+      city: string
+      region: string
+      country: string
+      temp_c: number
+    }): void {
+      const { city, region, country, temp_c } = cityData
       const isFavorite = this.isCityFavorite(city)
 
       if (isFavorite) {
@@ -19,7 +24,7 @@ export const useFavoritesStore = defineStore('favorites', {
           (favoriteCity) => favoriteCity.city !== city
         )
       } else {
-        this.favoriteCities = [...this.favoriteCities, { city, temp_c }]
+        this.favoriteCities = [...this.favoriteCities, { city, region, country, temp_c }]
       }
     },
 
