@@ -24,7 +24,7 @@
         </div>
       </BaseWeatherHeader>
 
-      <div class="current-weather-description">
+      <BaseWeatherHeader class="current-weather-description">
         <div v-if="weatherData.current.feelslike_c">
           Sensação Térmica: {{ weatherData.current.feelslike_c }}°C
         </div>
@@ -35,7 +35,7 @@
           Atualizado
           {{ formatLastUpdated(weatherData.current.last_updated, weatherData.location.localTime) }}
         </div>
-      </div>
+      </BaseWeatherHeader>
     </BaseSection>
 
     <BaseContainer class="main-info">
@@ -539,7 +539,10 @@ li:hover {
 }
 
 .current-weather-description {
+  flex-direction: column;
   font-size: 13px;
+  gap: 5px;
+  justify-content: center;
 }
 
 .current-weather-icon {
