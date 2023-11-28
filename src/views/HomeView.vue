@@ -49,13 +49,13 @@
         </ul>
 
         <button class="search-button" @click="getWeatherByCity">Verificar Tempo</button>
-        <button
+        <BaseButton
           class="favorite-button"
           @click="toggleFavoriteCity"
           :class="{ 'favorite-button': isFavoriteCity }"
         >
           Favoritar
-        </button>
+        </BaseButton>
 
         <div v-if="favoritesStore.favoriteCities.length">
           <h3>Favoritos</h3>
@@ -155,6 +155,7 @@
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, ref, toRefs, watch } from 'vue'
 
+import BaseButton from '@/components/BaseButton.vue'
 import BaseContainer from '@/components/BaseContainer.vue'
 import BaseSection from '@/components/BaseSection.vue'
 import BaseWeatherHeader from '@/components/BaseWeatherHeader.vue'
