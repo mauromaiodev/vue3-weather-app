@@ -48,7 +48,7 @@
           </li>
         </ul>
 
-        <button class="search-button" @click="getWeatherByCity">Verificar Tempo</button>
+        <BaseButton class="search-button" @click="getWeatherByCity">Verificar Tempo</BaseButton>
         <BaseButton
           class="favorite-button"
           @click="toggleFavoriteCity"
