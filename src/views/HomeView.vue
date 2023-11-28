@@ -53,7 +53,7 @@
           Favoritar
         </button>
 
-        <div>
+        <div v-if="favoritesStore.favoriteCities.length">
           <h3>Favoritos</h3>
           <ul style="position: relative">
             <li
