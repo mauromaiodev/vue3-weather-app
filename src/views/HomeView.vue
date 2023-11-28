@@ -69,7 +69,7 @@
                 {{ cityData.city }}, {{ cityData.region }}, {{ cityData.country }} /
                 {{ cityData.temp_c }}°C
               </div>
-              <button @click="removeFromFavorites(cityData)" class="remove-button">X</button>
+              <BaseRemoveButton @click="removeFromFavorites(cityData)">X</BaseRemoveButton>
             </li>
           </ul>
         </div>
@@ -157,6 +157,7 @@ import { computed, onMounted, onUnmounted, ref, toRefs, watch } from 'vue'
 
 import BaseButton from '@/components/BaseButton.vue'
 import BaseContainer from '@/components/BaseContainer.vue'
+import BaseRemoveButton from '@/components/BaseRemoveButton.vue'
 import BaseSection from '@/components/BaseSection.vue'
 import BaseWeatherHeader from '@/components/BaseWeatherHeader.vue'
 import {
@@ -630,19 +631,6 @@ li:hover {
 }
 .search-button:hover {
   background-color: #2161afcc;
-}
-
-.remove-button {
-  background-color: #ff3333;
-  color: #fff;
-  padding: 5px 10px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.remove-button:hover {
-  background-color: #cc0000;
 }
 
 .day-theme {
