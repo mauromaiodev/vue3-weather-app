@@ -156,6 +156,17 @@ import { formatLastUpdated } from '../helpers/formatLastUpdated'
 import { translateAirQuality } from '../helpers/translateAirQuality'
 import { translateWindDirection } from '../helpers/translateWindDirection'
 
+const apiKey = import.meta.env.VITE_API_KEY
+const currentWeatherApiUrl = 'https://api.weatherapi.com/v1/current.json'
+const forecastApiUrl = 'https://api.weatherapi.com/v1/forecast.json'
+const favoritesStore = useFavoritesStore()
+const selectedCity = ref('')
+const loading = ref(false)
+const suggestedCities = ref<SuggestedCity[]>([])
+const error = ref<string | null>(null)
+const isDay = ref(true)
+const { favoriteCities } = toRefs(favoritesStore)
+
 interface Location {
   name: string
   region: string
@@ -213,17 +224,6 @@ interface SuggestedCity {
   region: string
   country: string
 }
-
-const apiKey = import.meta.env.VITE_API_KEY
-const currentWeatherApiUrl = 'https://api.weatherapi.com/v1/current.json'
-const forecastApiUrl = 'https://api.weatherapi.com/v1/forecast.json'
-const favoritesStore = useFavoritesStore()
-const selectedCity = ref('')
-const loading = ref(false)
-const suggestedCities = ref<SuggestedCity[]>([])
-const error = ref<string | null>(null)
-const isDay = ref(true)
-const { favoriteCities } = toRefs(favoritesStore)
 
 watch(favoriteCities, (newFavorites) => {
   console.log('Lista de cidades favoritas atualizada:')
