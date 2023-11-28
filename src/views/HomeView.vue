@@ -150,7 +150,7 @@
 
 <script setup lang="ts">
 import { useFavoritesStore } from '@/useFavoritesStore'
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, ref, toRefs, watch } from 'vue'
 import { formatDate } from '../helpers/formatDate'
 import { formatLastUpdated } from '../helpers/formatLastUpdated'
 import { translateAirQuality } from '../helpers/translateAirQuality'
@@ -161,6 +161,8 @@ interface Location {
   region: string
   country: string
   localTime: string
+  lat: number
+  lon: number
 }
 
 interface CurrentWeather {
@@ -217,10 +219,17 @@ const currentWeatherApiUrl = 'https://api.weatherapi.com/v1/current.json'
 const forecastApiUrl = 'https://api.weatherapi.com/v1/forecast.json'
 const favoritesStore = useFavoritesStore()
 
+const { favoriteCities } = toRefs(favoritesStore)
+
+watch(favoriteCities, (newFavorites) => {
+  console.log('Lista de cidades favoritas atualizada:')
+  console.log(newFavorites)
+})
+
 const toggleFavoriteCity = () => {
-  const { name, region, country } = weatherData.value.location
+  const { name, region, country, lat, lon } = weatherData.value.location
   const { temp_c } = weatherData.value.current
-  favoritesStore.toggleFavoriteCity({ city: name, region, country, temp_c })
+  favoritesStore.toggleFavoriteCity({ city: name, region, country, temp_c, lat, lon })
 }
 
 const isFavoriteCity = computed(() => {
@@ -233,14 +242,18 @@ const removeFromFavorites = (cityData: {
   temp_c: number
   region?: string
   country?: string
+  lat?: number
+  lon?: number
 }) => {
   if (weatherData.value.location) {
-    const { region, country } = weatherData.value.location
+    const { region, country, lat, lon } = weatherData.value.location
     favoritesStore.toggleFavoriteCity({
       city: cityData.city,
       temp_c: cityData.temp_c,
       region,
-      country
+      country,
+      lat,
+      lon
     })
   }
 }
@@ -250,7 +263,9 @@ const weatherData = ref<WeatherData>({
     name: '',
     region: '',
     country: '',
-    localTime: ''
+    localTime: '',
+    lat: 0,
+    lon: 0
   },
   current: {
     temp_c: 0,
@@ -307,7 +322,9 @@ const getWeatherData = async (latitude?: number, longitude?: number, city?: stri
         name: currentData.location.name,
         region: currentData.location.region,
         country: currentData.location.country,
-        localTime: currentData.location.localtime
+        localTime: currentData.location.localtime,
+        lat: currentData.location.lat,
+        lon: currentData.location.lon
       },
       current: {
         temp_c: currentData.current.temp_c,
