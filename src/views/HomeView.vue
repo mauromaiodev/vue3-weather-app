@@ -225,6 +225,23 @@ interface SuggestedCity {
   country: string
 }
 
+interface FavoriteCitiesLocation {
+  name: string
+  region: string
+  country: string
+  lat: number
+  lon: number
+}
+
+interface FavoriteCitiesCurrentWeather {
+  temp_c: number
+}
+
+interface FavoriteCitiesWeatherData {
+  location: FavoriteCitiesLocation
+  current: FavoriteCitiesCurrentWeather
+}
+
 watch(favoriteCities, (newFavorites) => {
   console.log('Lista de cidades favoritas atualizada:')
   console.log(newFavorites)
@@ -236,14 +253,14 @@ onMounted(() => {
 
 onUnmounted(() => clearInterval(updateInterval))
 
-const updateFavoritesWeather = async () => {
+const updateFavoritesWeatherData = async () => {
   for (const cityData of favoriteCities.value) {
     const { lat, lon } = cityData
-    await getWeatherData(lat, lon)
+    await getWeatherDataForFavorite(lat, lon)
   }
 }
 
-const updateInterval = setInterval(updateFavoritesWeather, 5000)
+const updateInterval = setInterval(updateFavoritesWeatherData, 5 * 60 * 1000)
 
 const toggleFavoriteCity = () => {
   const { name, region, country, lat, lon } = weatherData.value.location
@@ -305,6 +322,45 @@ const weatherData = ref<WeatherData>({
     forecastday: []
   }
 })
+
+const favoriteCitiesWeather = ref<FavoriteCitiesWeatherData>({
+  location: {
+    name: '',
+    region: '',
+    country: '',
+    lat: 0,
+    lon: 0
+  },
+  current: {
+    temp_c: 0
+  }
+})
+
+const getWeatherDataForFavorite = async (latitude: number, longitude: number) => {
+  try {
+    const url = `${currentWeatherApiUrl}?key=${apiKey}&q=${latitude},${longitude}&lang=pt&aqi=yes`
+
+    const response = await fetch(url)
+    const currentData = await response.json()
+
+    console.log('Dados do clima para cidade favorita recebidos com sucesso:', currentData)
+
+    favoriteCitiesWeather.value.location = {
+      name: currentData.location.name,
+      region: currentData.location.region,
+      country: currentData.location.country,
+      lat: currentData.location.lat,
+      lon: currentData.location.lon
+    }
+
+    favoriteCitiesWeather.value.current = {
+      temp_c: currentData.current.temp_c
+    }
+  } catch (err: any) {
+    console.error('Erro ao obter dados do clima para cidade favorita:', err.message)
+    error.value = err.message
+  }
+}
 
 const getWeatherData = async (latitude?: number, longitude?: number, city?: string) => {
   loading.value = true
