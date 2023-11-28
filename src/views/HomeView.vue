@@ -48,8 +48,12 @@
           </li>
         </ul>
 
-        <button @click="getWeatherByCity">Verificar Tempo</button>
-        <button @click="toggleFavoriteCity" :class="{ 'favorite-button': isFavoriteCity }">
+        <button class="search-button" @click="getWeatherByCity">Verificar Tempo</button>
+        <button
+          class="favorite-button"
+          @click="toggleFavoriteCity"
+          :class="{ 'favorite-button': isFavoriteCity }"
+        >
           Favoritar
         </button>
 
@@ -710,6 +714,13 @@ li:hover {
 
 .list-item:hover {
   background-color: #ddd;
+}
+
+.search-button {
+  background-color: #5d9be5;
+}
+.search-button:hover {
+  background-color: #5d9ae5ee;
 }
 
 .remove-button {
