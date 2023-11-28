@@ -154,10 +154,12 @@
 
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, ref, toRefs, watch } from 'vue'
-import { formatDate } from '../helpers/formatDate'
-import { formatLastUpdated } from '../helpers/formatLastUpdated'
-import { translateAirQuality } from '../helpers/translateAirQuality'
-import { translateWindDirection } from '../helpers/translateWindDirection'
+import {
+  formatDate,
+  formatLastUpdated,
+  translateAirQuality,
+  translateWindDirection
+} from '../helpers'
 import { useFavoritesStore } from '../stores/useFavoritesStore'
 
 const apiKey = import.meta.env.VITE_API_KEY
