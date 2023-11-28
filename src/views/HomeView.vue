@@ -525,13 +525,6 @@ li:hover {
   gap: 10px;
 }
 
-.container {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  text-align: center;
-}
-
 .current-temp {
   font-size: 40px;
 }
