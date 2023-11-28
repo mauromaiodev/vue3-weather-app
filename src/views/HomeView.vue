@@ -668,6 +668,7 @@ li:hover {
   display: flex;
   flex-direction: column;
   gap: 8px;
+  padding: 0px 0px 12px 0px;
 }
 
 .forecast-week-item {
@@ -683,6 +684,7 @@ li:hover {
   display: flex;
   overflow-x: auto;
   gap: 8px;
+  padding: 0px 0px 12px 0px;
 }
 
 .forecast-hour-item {
