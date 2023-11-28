@@ -57,7 +57,7 @@
           Favoritar
         </BaseButton>
 
-        <div v-if="favoritesStore.favoriteCities.length">
+        <BaseSection v-if="favoritesStore.favoriteCities.length">
           <h3>Favoritos</h3>
           <ul class="favorite-list">
             <li
@@ -72,14 +72,14 @@
               <BaseRemoveButton @click="removeFromFavorites(cityData)">X</BaseRemoveButton>
             </li>
           </ul>
-        </div>
+        </BaseSection>
       </BaseContainer>
 
       <div v-if="loading">Carregando...</div>
 
       <div class="data-container-main" v-else>
         <section>
-          <div class="data-container-title">Hoje</div>
+          <BaseTitle title="Hoje"></BaseTitle>
 
           <div class="data-container">
             <div v-if="weatherData.current.wind_kph">
@@ -99,7 +99,7 @@
         </section>
 
         <section>
-          <div class="data-container-title">Previsão do dia por Hora</div>
+          <BaseTitle title="Previsão do dia por Hora"></BaseTitle>
           <div class="forecast-hour-container">
             <div
               v-for="forecastHour in filteredHourlyForecast"
@@ -120,7 +120,7 @@
         </section>
 
         <section>
-          <div class="data-container-title">Previsão da Semana</div>
+          <BaseTitle title="Previsão da Semana"></BaseTitle>
           <div class="forecast-week-container">
             <div v-for="day in filteredWeekForecast" :key="day.date" class="forecast-week-item">
               <div>{{ formatDate(day.date) }}</div>
@@ -159,6 +159,7 @@ import BaseButton from '@/components/BaseButton.vue'
 import BaseContainer from '@/components/BaseContainer.vue'
 import BaseRemoveButton from '@/components/BaseRemoveButton.vue'
 import BaseSection from '@/components/BaseSection.vue'
+import BaseTitle from '@/components/BaseTitle.vue'
 import BaseWeatherHeader from '@/components/BaseWeatherHeader.vue'
 import {
   formatDate,
@@ -550,11 +551,6 @@ li:hover {
 .current-weather-icon {
   width: 64px;
   height: 64px;
-}
-
-.data-container-title {
-  display: flex;
-  font-size: 20px;
 }
 
 .last-updated {
