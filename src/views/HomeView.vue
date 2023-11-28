@@ -7,7 +7,7 @@
         </h2>
         <button @click="getCurrentLocation" :disabled="loading">
           <i class="loading-icon" v-if="loading"></i>
-          Atualizar
+          Loc. Atual
         </button>
       </div>
 
