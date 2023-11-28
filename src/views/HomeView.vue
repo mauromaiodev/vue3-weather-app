@@ -61,7 +61,10 @@
               :key="cityData.city"
               class="list-item"
             >
-              <div>{{ cityData.city }} / {{ cityData.temp_c }}°C</div>
+              <div>
+                {{ cityData.city }}, {{ cityData.region }}, {{ cityData.country }} /
+                {{ cityData.temp_c }}°C
+              </div>
               <button @click="removeFromFavorites(cityData)" class="remove-button">X</button>
             </li>
           </ul>
@@ -215,9 +218,9 @@ const forecastApiUrl = 'https://api.weatherapi.com/v1/forecast.json'
 const favoritesStore = useFavoritesStore()
 
 const toggleFavoriteCity = () => {
-  const { name } = weatherData.value.location
+  const { name, region, country } = weatherData.value.location
   const { temp_c } = weatherData.value.current
-  favoritesStore.toggleFavoriteCity({ city: name, temp_c })
+  favoritesStore.toggleFavoriteCity({ city: name, region, country, temp_c })
 }
 
 const isFavoriteCity = computed(() => {
@@ -225,8 +228,21 @@ const isFavoriteCity = computed(() => {
   return favoritesStore.isCityFavorite(name)
 })
 
-const removeFromFavorites = (cityData: { city: string; temp_c: number }) => {
-  favoritesStore.toggleFavoriteCity({ city: cityData.city, temp_c: cityData.temp_c })
+const removeFromFavorites = (cityData: {
+  city: string
+  temp_c: number
+  region?: string
+  country?: string
+}) => {
+  if (weatherData.value.location) {
+    const { region, country } = weatherData.value.location
+    favoritesStore.toggleFavoriteCity({
+      city: cityData.city,
+      temp_c: cityData.temp_c,
+      region,
+      country
+    })
+  }
 }
 
 const weatherData = ref<WeatherData>({
