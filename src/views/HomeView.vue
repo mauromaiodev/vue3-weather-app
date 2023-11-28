@@ -757,4 +757,3 @@ li:hover {
     color 0.5s ease;
 }
 </style>
-@/store/useFavoritesStore
