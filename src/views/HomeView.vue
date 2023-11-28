@@ -150,7 +150,7 @@
 
 <script setup lang="ts">
 import { useFavoritesStore } from '@/useFavoritesStore'
-import { computed, onMounted, ref, toRefs, watch } from 'vue'
+import { computed, onMounted, onUnmounted, ref, toRefs, watch } from 'vue'
 import { formatDate } from '../helpers/formatDate'
 import { formatLastUpdated } from '../helpers/formatLastUpdated'
 import { translateAirQuality } from '../helpers/translateAirQuality'
@@ -218,13 +218,32 @@ const apiKey = import.meta.env.VITE_API_KEY
 const currentWeatherApiUrl = 'https://api.weatherapi.com/v1/current.json'
 const forecastApiUrl = 'https://api.weatherapi.com/v1/forecast.json'
 const favoritesStore = useFavoritesStore()
-
+const selectedCity = ref('')
+const loading = ref(false)
+const suggestedCities = ref<SuggestedCity[]>([])
+const error = ref<string | null>(null)
+const isDay = ref(true)
 const { favoriteCities } = toRefs(favoritesStore)
 
 watch(favoriteCities, (newFavorites) => {
   console.log('Lista de cidades favoritas atualizada:')
   console.log(newFavorites)
 })
+
+onMounted(() => {
+  getCurrentLocation()
+})
+
+onUnmounted(() => clearInterval(updateInterval))
+
+const updateFavoritesWeather = async () => {
+  for (const cityData of favoriteCities.value) {
+    const { lat, lon } = cityData
+    await getWeatherData(lat, lon)
+  }
+}
+
+const updateInterval = setInterval(updateFavoritesWeather, 5000)
 
 const toggleFavoriteCity = () => {
   const { name, region, country, lat, lon } = weatherData.value.location
@@ -285,16 +304,6 @@ const weatherData = ref<WeatherData>({
   forecast: {
     forecastday: []
   }
-})
-
-const selectedCity = ref('')
-const loading = ref(false)
-const suggestedCities = ref<SuggestedCity[]>([])
-const error = ref<string | null>(null)
-const isDay = ref(true)
-
-onMounted(() => {
-  getCurrentLocation()
 })
 
 const getWeatherData = async (latitude?: number, longitude?: number, city?: string) => {
