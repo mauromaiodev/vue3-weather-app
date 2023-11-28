@@ -161,6 +161,7 @@ import {
   translateAirQuality,
   translateWindDirection
 } from '../helpers'
+import type { FavoriteCitiesWeatherData, SuggestedCity, WeatherData } from '../interfaces'
 import { useFavoritesStore } from '../stores/useFavoritesStore'
 
 const apiKey = import.meta.env.VITE_API_KEY
@@ -173,81 +174,6 @@ const suggestedCities = ref<SuggestedCity[]>([])
 const error = ref<string | null>(null)
 const isDay = ref(true)
 const { favoriteCities } = toRefs(favoritesStore)
-
-interface Location {
-  name: string
-  region: string
-  country: string
-  localTime: string
-  lat: number
-  lon: number
-}
-
-interface CurrentWeather {
-  temp_c: number
-  feelslike_c: number
-  last_updated: string
-  condition: {
-    text: string
-    icon: string
-  }
-  wind_kph: number
-  wind_dir: string
-  air_quality: {
-    'us-epa-index': number
-  }
-  humidity: number
-}
-
-interface Forecast {
-  forecastday: {
-    date: string
-    day: {
-      avgtemp_c: number
-      condition: {
-        text: string
-        icon: string
-      }
-    }
-    hour: {
-      time: string
-      temp_c: number
-      condition?: {
-        text: string
-        icon: string
-      }
-    }[]
-  }[]
-}
-
-interface WeatherData {
-  location: Location
-  current: CurrentWeather
-  forecast: Forecast
-}
-
-interface SuggestedCity {
-  name: string
-  region: string
-  country: string
-}
-
-interface FavoriteCitiesLocation {
-  name: string
-  region: string
-  country: string
-  lat: number
-  lon: number
-}
-
-interface FavoriteCitiesCurrentWeather {
-  temp_c: number
-}
-
-interface FavoriteCitiesWeatherData {
-  location: FavoriteCitiesLocation
-  current: FavoriteCitiesCurrentWeather
-}
 
 watch(favoriteCities, (newFavorites) => {
   console.log('Lista de cidades favoritas atualizada:')
