@@ -59,7 +59,7 @@
 
         <div v-if="favoritesStore.favoriteCities.length">
           <h3>Favoritos</h3>
-          <ul style="position: relative">
+          <ul class="favorite-list">
             <li
               v-for="cityData in favoritesStore.favoriteCities"
               :key="cityData.city"
@@ -571,6 +571,11 @@ li:hover {
   }
 }
 
+.favorite-list {
+  position: relative;
+  border-radius: 5px;
+}
+
 .weather-header {
   display: flex;
   flex-direction: row;
@@ -702,10 +707,10 @@ li:hover {
 }
 .list-item {
   padding: 10px;
-  border-bottom: 1px solid #ddd;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  border-bottom: 1px solid #ddd;
 }
 
 .list-item div {
