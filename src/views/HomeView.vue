@@ -156,6 +156,7 @@
 import { computed, onMounted, onUnmounted, ref, toRefs, watch } from 'vue'
 import {
   formatDate,
+  formatHour,
   formatLastUpdated,
   translateAirQuality,
   translateWindDirection
@@ -498,12 +499,6 @@ const selectCity = (city: SuggestedCity) => {
 const getHourlyForecast = computed(() => {
   return weatherData.value.forecast.forecastday[0]?.hour || []
 })
-
-const formatHour = (time: string) => {
-  const date = new Date(time)
-  const formattedHour = `${date.getHours()}:${String(date.getMinutes()).padStart(2, '0')}`
-  return formattedHour
-}
 
 const currentIndex = computed(() => {
   const currentHour = new Date().getHours()
