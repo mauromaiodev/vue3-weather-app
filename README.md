@@ -11,20 +11,20 @@ Certifique-se de que você tenha as seguintes ferramentas instaladas em sua máq
 
 ## Configuração do Projeto
 
-1. **Clonando o repositório:**
+1 . **Clonando o repositório:**
 
-   ```bash
-   git clone https://github.com/mauromaiodev/vue3-weather-app
-   cd vue3-weather-app
+```bash
+git clone https://github.com/mauromaiodev/vue3-weather-app
+cd vue3-weather-app
 
-   ```
+```
 
-2. **Instalando dependências:**
+2 . **Instalando dependências:**
 
-   ```bash
-   npm install
+```bash
+npm install
 
-   ```
+```
 
 3 . **Crie um arquivo .env na raiz do projeto para armazenar as variáveis de ambiente. Exemplo:**
 
@@ -33,37 +33,37 @@ VITE_API_KEY=sua-weather-api-key
 
 ```
 
-3 . **Rodar em dev:**
+4 . **Rodar em dev:**
 
 ```bash
 npm run dev
 
 ```
 
-4. **A estrutura do projeto segue a arquitetura padrão do Vue: Exemplo:**
+5 . **A estrutura do projeto segue a arquitetura padrão do Vue: Exemplo:**
 
-   ```bash
-   src/
-    ├── assets/
-    ├── components/
-    ├── helpers/
-    ├── interfaces/
-    ├── router/
-    ├── stores/
-    └── views/
+```bash
+src/
+ ├── assets/
+ ├── components/
+ ├── helpers/
+ ├── interfaces/
+ ├── router/
+ ├── stores/
+ └── views/
 
-    assets: Arquivos de imagens, sons, ícones, etc, que compõem o projeto.
-    components: Pasta para armazenar os componentes customizados da aplicação.
-    helpers: Contém funções e utilitários auxiliares usados em todo o projeto.
-    interfaces: Contém definições de interfaces ou tipos usados.
-    router: Configurações relacionadas ao roteamento da aplicação.
-    stores: Usado para armazenar lógica de gerenciamento de estado.
-    views: Armazena as visualizações ou páginas da aplicação.
+ assets: Arquivos de imagens, sons, ícones, etc, que compõem o projeto.
+ components: Pasta para armazenar os componentes customizados da aplicação.
+ helpers: Contém funções e utilitários auxiliares usados em todo o projeto.
+ interfaces: Contém definições de interfaces ou tipos usados.
+ router: Configurações relacionadas ao roteamento da aplicação.
+ stores: Usado para armazenar lógica de gerenciamento de estado.
+ views: Armazena as visualizações ou páginas da aplicação.
 
-   ```
+```
 
-5. **Considerações Finais**
+6 . **Considerações Finais**
 
-   Este é um guia básico para configurar e desenvolver o App de Previsão do Tempo - Horizon.
+Este é um guia básico para configurar e desenvolver o App de Previsão do Tempo - Horizon.
 
-   Sinta-se à vontade para adaptar e expandir esse guia de acordo com as necessidades do seu projeto.
+Sinta-se à vontade para adaptar e expandir esse guia de acordo com as necessidades do seu projeto.
