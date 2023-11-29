@@ -604,18 +604,4 @@ li:hover {
 .search-button:hover {
   background-color: #2161afcc;
 }
-
-.day-theme {
-  background-color: #5d9be5;
-  transition:
-    background-color 0.5s ease,
-    color 0.5s ease;
-}
-
-.night-theme {
-  background-color: #44296a;
-  transition:
-    background-color 0.5s ease,
-    color 0.5s ease;
-}
 </style>
