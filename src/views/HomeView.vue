@@ -77,8 +77,8 @@
 
       <div v-if="loading">Carregando...</div>
 
-      <div class="data-container-main" v-else>
-        <section>
+      <div v-else>
+        <BaseSection>
           <BaseTitle title="Hoje"></BaseTitle>
 
           <div class="data-container">
@@ -96,9 +96,9 @@
               Umidade: {{ weatherData.current.humidity }}%
             </div>
           </div>
-        </section>
+        </BaseSection>
 
-        <section>
+        <BaseSection>
           <BaseTitle title="Previsão do dia por Hora"></BaseTitle>
           <div class="forecast-hour-container">
             <div
@@ -117,9 +117,9 @@
               />
             </div>
           </div>
-        </section>
+        </BaseSection>
 
-        <section>
+        <BaseSection>
           <BaseTitle title="Previsão da Semana"></BaseTitle>
           <div class="forecast-week-container">
             <div v-for="day in filteredWeekForecast" :key="day.date" class="forecast-week-item">
@@ -146,7 +146,7 @@
               </div>
             </div>
           </div>
-        </section>
+        </BaseSection>
       </div>
     </BaseContainer>
   </BaseContainer>
@@ -527,12 +527,6 @@ li:hover {
 
 .current-temp {
   font-size: 40px;
-}
-
-.data-container-main {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
 }
 
 .current-weather-info {
