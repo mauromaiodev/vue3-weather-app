@@ -543,7 +543,6 @@ li:hover {
   flex-direction: column;
   overflow-x: auto;
   gap: 12px;
-  padding: 0px 0px 12px 0px;
 }
 
 .forecast-hour-container {
