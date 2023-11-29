@@ -1,6 +1,6 @@
 # App de Previsão do Tempo - Horizon
 
-Aplicativo de previsão do tempo usando Vue 3, Vite, Pinia e Weather API. (https://www.weatherapi.com/docs/)
+Aplicativo de previsão do tempo usando o padrão Mobile First, Vue 3, Vite, Pinia e Weather API. (https://www.weatherapi.com/docs/)
 
 ## Pré-requisitos
 
