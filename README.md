@@ -2,51 +2,68 @@
 
 Aplicativo de previsão do tempo usando Vue 3, Vite, Pinia e Weather API. (https://www.weatherapi.com/docs/)
 
-## Recommended IDE Setup
+## Pré-requisitos
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+Certifique-se de que você tenha as seguintes ferramentas instaladas em sua máquina:
 
-## Type Support for `.vue` Imports in TS
+- Node.js: [Download](https://nodejs.org/)
+- Git
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin) to make the TypeScript language service aware of `.vue` types.
+## Configuração do Projeto
 
-If the standalone TypeScript plugin doesn't feel fast enough to you, Volar has also implemented a [Take Over Mode](https://github.com/johnsoncodehk/volar/discussions/471#discussioncomment-1361669) that is more performant. You can enable it by the following steps:
+1. **Clonando o repositório:**
 
-1. Disable the built-in TypeScript Extension
-   1. Run `Extensions: Show Built-in Extensions` from VSCode's command palette
-   2. Find `TypeScript and JavaScript Language Features`, right click and select `Disable (Workspace)`
-2. Reload the VSCode window by running `Developer: Reload Window` from the command palette.
+   ```bash
+   git clone https://github.com/mauromaiodev/vue3-weather-app
+   cd vue3-weather-app
 
-## Customize configuration
+   ```
 
-See [Vite Configuration Reference](https://vitejs.dev/config/).
+2. **Instalando dependências:**
 
-## Project Setup
+   ```bash
+   npm install
 
-```sh
-npm install
+   ```
+
+3 . **Crie um arquivo .env na raiz do projeto para armazenar as variáveis de ambiente. Exemplo:**
+
+```bash
+VITE_API_KEY=sua-weather-api-key
+
 ```
 
-### Compile and Hot-Reload for Development
+3 . **Rodar em dev:**
 
-```sh
+```bash
 npm run dev
+
 ```
 
-### Type-Check, Compile and Minify for Production
+4. **A estrutura do projeto segue a arquitetura padrão do Vue: Exemplo:**
 
-```sh
-npm run build
-```
+   ```bash
+   src/
+    ├── assets/
+    ├── components/
+    ├── helpers/
+    ├── interfaces/
+    ├── router/
+    ├── stores/
+    └── views/
 
-### Run Unit Tests with [Vitest](https://vitest.dev/)
+    assets: Arquivos de imagens, sons, ícones, etc, que compõem o projeto.
+    components: Pasta para armazenar os componentes customizados da aplicação.
+    helpers: Contém funções e utilitários auxiliares usados em todo o projeto.
+    interfaces: Contém definições de interfaces ou tipos usados.
+    router: Configurações relacionadas ao roteamento da aplicação.
+    stores: Usado para armazenar lógica de gerenciamento de estado.
+    views: Armazena as visualizações ou páginas da aplicação.
 
-```sh
-npm run test:unit
-```
+   ```
 
-### Lint with [ESLint](https://eslint.org/)
+5. **Considerações Finais**
 
-```sh
-npm run lint
-```
+   Este é um guia básico para configurar e desenvolver o App de Previsão do Tempo - Horizon.
+
+   Sinta-se à vontade para adaptar e expandir esse guia de acordo com as necessidades do seu projeto.
