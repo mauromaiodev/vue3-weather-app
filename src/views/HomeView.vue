@@ -63,9 +63,12 @@
           <BaseTitle title="Favoritos" />
           <ul class="favorite-list">
             <li
-              v-for="cityData in favoritesStore.favoriteCities"
+              v-for="(cityData, index) in favoritesStore.favoriteCities"
               :key="cityData.city"
-              class="list-item"
+              :class="{
+                'list-item': true,
+                'no-border': index === favoritesStore.favoriteCities.length - 1
+              }"
             >
               <div>
                 {{ cityData.city }}, {{ cityData.region }}, {{ cityData.country }} /
@@ -497,6 +500,14 @@ li:hover {
   border-radius: 5px;
 }
 
+.favorite-list .list-item {
+  border-bottom: 1px solid #ddd;
+}
+
+.favorite-list .no-border {
+  border-bottom: none;
+}
+
 .loading-icon {
   display: inline-block;
   border: 4px solid rgba(255, 255, 255, 0.3);
@@ -572,7 +583,6 @@ li:hover {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid #ddd;
 }
 
 .list-item div {
