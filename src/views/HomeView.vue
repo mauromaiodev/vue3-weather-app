@@ -507,7 +507,7 @@ li:hover {
 }
 
 .main-info {
-  padding: 10px;
+  padding: 0px 10px;
 }
 
 .current-temp {
