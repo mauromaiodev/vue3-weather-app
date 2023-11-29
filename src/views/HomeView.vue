@@ -5,10 +5,10 @@
         <div class="location-name" v-if="weatherData.location.name">
           {{ weatherData.location.name }}, {{ weatherData.location.region }}
         </div>
-        <button @click="getCurrentLocation" :disabled="loading">
+        <BaseButton @click="getCurrentLocation" :disabled="loading">
           <i class="loading-icon" v-if="loading"></i>
           Loc. Atual
-        </button>
+        </BaseButton>
       </BaseWeatherHeader>
 
       <BaseWeatherHeader>
