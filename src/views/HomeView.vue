@@ -42,6 +42,7 @@
       <BaseContainer>
         <label for="cityInput">Digite o nome da Cidade/Estado/País:</label>
         <input v-model="selectedCity" id="cityInput" type="text" @input="handleInput" />
+        <div v-if="error" class="error-message">{{ error }}</div>
         <ul v-if="suggestedCities.length" style="position: relative">
           <li v-for="city in suggestedCities" :key="city.name">
             <div @click="selectCity(city)">
@@ -381,7 +382,7 @@ const getCurrentLocation = () => {
         }
       )
     } else {
-      console.error('Geolocalização não suportada no seu navegador.')
+      window.alert('Geolocalização não suportada no seu navegador.')
       loading.value = false
     }
   }, 1000)
@@ -391,7 +392,7 @@ const getWeatherByCity = async () => {
   if (selectedCity.value) {
     await getWeatherData(undefined, undefined, selectedCity.value)
   } else {
-    console.error('Digite o nome da cidade antes de verificar o tempo.')
+    window.alert('Digite o nome da cidade antes de verificar o tempo.')
   }
 }
 
