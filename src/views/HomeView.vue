@@ -81,7 +81,7 @@
         <BaseSection>
           <BaseTitle title="Hoje"></BaseTitle>
 
-          <div class="data-container">
+          <BaseDiv>
             <div v-if="weatherData.current.wind_kph">
               Velocidade do Vento: {{ weatherData.current.wind_kph }} km/h
             </div>
@@ -95,7 +95,7 @@
             <div v-if="weatherData.current.humidity">
               Umidade: {{ weatherData.current.humidity }}%
             </div>
-          </div>
+          </BaseDiv>
         </BaseSection>
 
         <BaseSection>
@@ -122,7 +122,7 @@
         <BaseSection>
           <BaseTitle title="Previsão da Semana"></BaseTitle>
           <div class="forecast-week-container">
-            <div v-for="day in filteredWeekForecast" :key="day.date" class="forecast-week-item">
+            <BaseDiv v-for="day in filteredWeekForecast" :key="day.date">
               <div>{{ formatDate(day.date) }}</div>
 
               <div class="forecast-hour-container">
@@ -142,7 +142,7 @@
                   />
                 </div>
               </div>
-            </div>
+            </BaseDiv>
           </div>
         </BaseSection>
       </div>
@@ -155,6 +155,7 @@ import { computed, onMounted, onUnmounted, ref, toRefs, watch } from 'vue'
 
 import BaseButton from '@/components/BaseButton.vue'
 import BaseContainer from '@/components/BaseContainer.vue'
+import BaseDiv from '@/components/BaseDiv.vue'
 import BaseRemoveButton from '@/components/BaseRemoveButton.vue'
 import BaseSection from '@/components/BaseSection.vue'
 import BaseTitle from '@/components/BaseTitle.vue'
@@ -551,36 +552,18 @@ li:hover {
   margin-top: 12px;
 }
 
-.data-container {
-  display: flex;
-  flex-direction: column;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
 .forecast-week-container {
   display: flex;
   flex-direction: column;
+  overflow-x: auto;
   gap: 12px;
   padding: 0px 0px 12px 0px;
-}
-
-.forecast-week-item {
-  display: flex;
-  flex-direction: column;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  gap: 8px;
 }
 
 .forecast-hour-container {
   display: flex;
   overflow-x: auto;
-  gap: 8px;
+  gap: 12px;
   padding: 0px 0px 12px 0px;
 }
 
