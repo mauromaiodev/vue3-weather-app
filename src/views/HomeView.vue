@@ -40,8 +40,14 @@
 
     <BaseContainer class="main-info">
       <BaseContainer>
-        <label for="cityInput">Digite o nome da Cidade/Estado/País:</label>
-        <input v-model="selectedCity" id="cityInput" type="text" @input="handleInput" />
+        <label for="cityInput">Digite o nome da Cidade / Estado / País:</label>
+        <input
+          v-model="selectedCity"
+          id="cityInput"
+          type="text"
+          @input="handleInput"
+          placeholder="Cidade / Estado / País"
+        />
         <div v-if="error" class="error-message">{{ error }}</div>
         <ul v-if="suggestedCities.length" style="position: relative">
           <li v-for="city in suggestedCities" :key="city.name">
