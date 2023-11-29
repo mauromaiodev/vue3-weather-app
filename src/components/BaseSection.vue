@@ -9,5 +9,6 @@
   padding: 10px 0px;
   display: flex;
   flex-direction: column;
+  gap: 10px;
 }
 </style>
