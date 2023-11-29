@@ -245,6 +245,7 @@ const weatherData = ref<WeatherData>({
     temp_c: 0,
     feelslike_c: 0,
     last_updated: '',
+    is_day: 0,
     condition: {
       text: '',
       icon: ''
@@ -340,6 +341,7 @@ const getWeatherData = async (latitude?: number, longitude?: number, city?: stri
         },
         wind_kph: currentData.current.wind_kph,
         wind_dir: currentData.current.wind_dir,
+        is_day: currentData.current.is_day,
         air_quality: {
           'us-epa-index': currentData.current.air_quality['us-epa-index']
         }
@@ -348,9 +350,7 @@ const getWeatherData = async (latitude?: number, longitude?: number, city?: stri
         forecastday: forecastData.forecast.forecastday
       }
     }
-
-    const currentHour = new Date(currentData.location.localtime).getHours()
-    isDay.value = currentHour >= 6 && currentHour < 18
+    isDay.value = currentData.current.is_day === 1
   } catch (err: any) {
     console.error('Erro ao obter dados do clima:', err.message)
     error.value = err.message

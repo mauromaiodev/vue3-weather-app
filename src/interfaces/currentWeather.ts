@@ -7,6 +7,7 @@ export interface CurrentWeather {
     icon: string
   }
   wind_kph: number
+  is_day: number
   wind_dir: string
   air_quality: {
     'us-epa-index': number
