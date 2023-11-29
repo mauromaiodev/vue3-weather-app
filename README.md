@@ -2,6 +2,12 @@
 
 Aplicativo de previsão do tempo usando o padrão Mobile First, Vue 3, Vite, Pinia e Weather API. (https://www.weatherapi.com/docs/)
 
+<p align="center">
+  <kbd>
+    <img src="https://github.com/mauromaiodev/vue3-weather-app/blob/main/project-preview.png"></img>
+  </kbd>
+</p>
+
 ## Pré-requisitos
 
 Certifique-se de que você tenha as seguintes ferramentas instaladas em sua máquina:
