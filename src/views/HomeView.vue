@@ -60,7 +60,7 @@
         </BaseButton>
 
         <BaseSection v-if="favoritesStore.favoriteCities.length">
-          <h3>Favoritos</h3>
+          <BaseTitle title="Favoritos" />
           <ul class="favorite-list">
             <li
               v-for="cityData in favoritesStore.favoriteCities"
@@ -81,7 +81,7 @@
 
       <div v-else>
         <BaseSection>
-          <BaseTitle title="Hoje"></BaseTitle>
+          <BaseTitle title="Hoje" />
 
           <BaseDiv>
             <div v-if="weatherData.current.wind_kph">
@@ -101,7 +101,7 @@
         </BaseSection>
 
         <BaseSection>
-          <BaseTitle title="Previsão do dia por Hora"></BaseTitle>
+          <BaseTitle title="Previsão do dia por Hora" />
           <div class="forecast-hour-container">
             <div
               v-for="forecastHour in filteredHourlyForecast"
@@ -122,7 +122,7 @@
         </BaseSection>
 
         <BaseSection>
-          <BaseTitle title="Previsão da Semana"></BaseTitle>
+          <BaseTitle title="Previsão da Semana" />
           <div class="forecast-week-container">
             <BaseDiv v-for="day in filteredWeekForecast" :key="day.date">
               <div>{{ formatDate(day.date) }}</div>

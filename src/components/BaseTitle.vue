@@ -11,6 +11,7 @@ defineProps(['title'])
 <style>
 .title {
   display: flex;
+  flex-direction: column;
   font-size: 20px;
 }
 </style>
