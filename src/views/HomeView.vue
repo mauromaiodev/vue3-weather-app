@@ -124,8 +124,6 @@
           <div class="forecast-week-container">
             <div v-for="day in filteredWeekForecast" :key="day.date" class="forecast-week-item">
               <div>{{ formatDate(day.date) }}</div>
-              <div>{{ day.day.avgtemp_c }}°C</div>
-              <div>{{ day.day.condition.text }}</div>
 
               <div class="forecast-hour-container">
                 <div
@@ -565,7 +563,7 @@ li:hover {
 .forecast-week-container {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 12px;
   padding: 0px 0px 12px 0px;
 }
 
