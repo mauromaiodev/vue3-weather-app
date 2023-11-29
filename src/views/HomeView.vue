@@ -44,7 +44,9 @@
         <input v-model="selectedCity" id="cityInput" type="text" @input="handleInput" />
         <ul v-if="suggestedCities.length" style="position: relative">
           <li v-for="city in suggestedCities" :key="city.name">
-            <a @click="selectCity(city)">{{ city.name }}, {{ city.region }}, {{ city.country }}</a>
+            <div @click="selectCity(city)">
+              {{ city.name }}, {{ city.region }}, {{ city.country }}
+            </div>
           </li>
         </ul>
 
@@ -460,14 +462,14 @@ ul {
   background-color: #f1f1f1;
   width: 100%;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
 }
 
 li {
   padding: 10px;
-  border-bottom: 1px solid #ddd;
 }
 
-li a {
+li div {
   text-decoration: none;
   color: #333;
   display: block;
