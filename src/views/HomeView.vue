@@ -3,7 +3,7 @@
     <BaseSection :class="{ 'day-theme': isDay, 'night-theme': !isDay }">
       <BaseWeatherHeader>
         <div class="location-name" v-if="weatherData.location.name">
-          {{ weatherData.location.name }}, {{ weatherData.location.region }}
+          {{ weatherData.location.name }}
         </div>
         <BaseButton @click="getCurrentLocation" :disabled="loading">
           <i class="loading-icon" v-if="loading"></i>
